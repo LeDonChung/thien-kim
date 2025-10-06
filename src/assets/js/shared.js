@@ -1,4 +1,4 @@
-// ERP Thiên Kim - Shared JavaScript Functions
+// ERP - Shared JavaScript Functions
 
 // Navigation functionality
 class Navigation {

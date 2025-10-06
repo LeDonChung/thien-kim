@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản lý Đơn hàng - ERP Thiên Kim</title>
+    <title>Quản lý Đơn hàng - ERP</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="assets/css/styles.css" rel="stylesheet">
 </head>
@@ -13,7 +13,7 @@
         <div class="header-content">
             <div class="logo">
                 <i class="fas fa-industry"></i>
-                ERP Thiên Kim
+                ERP
             </div>
             <div class="user-info">
                 <span>Xin chào, Admin</span>
@@ -623,7 +623,7 @@
                     </div>
                     <div class="form-group" style="flex: 1;">
                         <label class="form-label">Số lượng:</label>
-                        <input type="number" class="form-input" name="items[${index}][quantity]" value="${item.quantity}" min="1" required onchange="calculateItemTotal(this)">
+                        <input type="number" class="form-input" name="items[${index}][quantity]" value="${item.quantity}" min="1" step="1" required onchange="calculateItemTotal(this)" oninput="validateQuantity(this)">
                     </div>
                     <div class="form-group" style="flex: 2;">
                         <label class="form-label">Đơn giá (VNĐ):</label>
@@ -631,7 +631,7 @@
                     </div>
                     <div class="form-group" style="flex: 2;">
                         <label class="form-label">Thành tiền:</label>
-                        <input type="text" class="form-input" name="items[${index}][totalPrice]" value="${new Intl.NumberFormat('vi-VN').format(item.totalPrice)}" readonly style="background: #e9ecef;">
+                        <input type="text" class="form-input" name="items[${index}][totalPrice]" value="${new Intl.NumberFormat('vi-VN').format(item.totalPrice || 0)}" readonly style="background: #e9ecef;">
                     </div>
                     <div class="form-group" style="flex: 0;">
                         <label class="form-label">&nbsp;</label>
@@ -985,7 +985,7 @@
                 </div>
                 <div class="form-group" style="flex: 1;">
                     <label class="form-label">Số lượng:</label>
-                    <input type="number" class="form-input" name="items[${itemIndex}][quantity]" placeholder="1" min="1" required onchange="calculateItemTotal(this)">
+                    <input type="number" class="form-input" name="items[${itemIndex}][quantity]" placeholder="1" min="1" step="1" required onchange="calculateItemTotal(this)" oninput="validateQuantity(this)">
                 </div>
                 <div class="form-group" style="flex: 2;">
                     <label class="form-label">Đơn giá (VNĐ):</label>
@@ -1013,7 +1013,7 @@
             
             if (selectedOption.value) {
                 const productName = selectedOption.getAttribute('data-name') || '';
-                const productPrice = selectedOption.getAttribute('data-price') || '0';
+                const productPrice = parseFloat(selectedOption.getAttribute('data-price') || '0');
                 
                 // Fill product information
                 itemRow.querySelector(`input[name="items[${itemIndex}][productName]"]`).value = productName;
@@ -1021,14 +1021,18 @@
                 
                 // Calculate total if quantity is already entered
                 const quantityInput = itemRow.querySelector(`input[name="items[${itemIndex}][quantity]"]`);
-                if (quantityInput.value) {
+                if (quantityInput.value && parseFloat(quantityInput.value) > 0) {
                     calculateItemTotal(quantityInput);
+                } else {
+                    // Reset total price if no quantity
+                    itemRow.querySelector(`input[name="items[${itemIndex}][totalPrice]"]`).value = '0';
+                    calculateTotalAmount();
                 }
             } else {
                 // Clear fields if no product selected
                 itemRow.querySelector(`input[name="items[${itemIndex}][productName]"]`).value = '';
-                itemRow.querySelector(`input[name="items[${itemIndex}][unitPrice]"]`).value = '';
-                itemRow.querySelector(`input[name="items[${itemIndex}][totalPrice]"]`).value = '';
+                itemRow.querySelector(`input[name="items[${itemIndex}][unitPrice]"]`).value = '0';
+                itemRow.querySelector(`input[name="items[${itemIndex}][totalPrice]"]`).value = '0';
                 calculateTotalAmount();
             }
         }
@@ -1049,7 +1053,8 @@
             const unitPrice = parseFloat(unitPriceInput.value) || 0;
             const totalPrice = quantity * unitPrice;
             
-            totalPriceInput.value = formatCurrency(totalPrice).replace(' VNĐ', '');
+            // Hiển thị số có định dạng phân cách hàng nghìn
+            totalPriceInput.value = new Intl.NumberFormat('vi-VN').format(totalPrice);
             
             calculateTotalAmount();
         }
@@ -1059,11 +1064,13 @@
             let totalAmount = 0;
             
             totalPriceInputs.forEach(input => {
-                const value = input.value.replace(/[,\s]/g, '');
+                // Loại bỏ dấu phân cách hàng nghìn và chuyển về số
+                const value = input.value.replace(/[,\s]/g, '').replace(/\./g, '');
                 totalAmount += parseFloat(value) || 0;
             });
             
-            document.getElementById('totalAmount').textContent = formatCurrency(totalAmount);
+            // Hiển thị tổng tiền với định dạng tiền tệ Việt Nam
+            document.getElementById('totalAmount').textContent = new Intl.NumberFormat('vi-VN').format(totalAmount) + ' VNĐ';
         }
 
         // Form submission
@@ -1092,6 +1099,8 @@
                 const productName = row.querySelector(`input[name="items[${index}][productName]"]`).value;
                 const quantity = parseFloat(row.querySelector(`input[name="items[${index}][quantity]"]`).value) || 0;
                 const unitPrice = parseFloat(row.querySelector(`input[name="items[${index}][unitPrice]"]`).value) || 0;
+                
+                // Tính thành tiền chính xác
                 const totalPrice = quantity * unitPrice;
                 
                 if (productId && productName && quantity > 0) {
@@ -1100,12 +1109,12 @@
                         productName,
                         quantity,
                         unitPrice,
-                        totalPrice
+                        totalPrice: Math.round(totalPrice) // Làm tròn để tránh lỗi floating point
                     });
                 }
             });
             
-            // Calculate total amount
+            // Calculate total amount - tính tổng tiền chính xác
             orderData.totalAmount = orderData.items.reduce((sum, item) => sum + item.totalPrice, 0);
             
             // Debug logging
@@ -1247,7 +1256,7 @@
                     <td>${order.customerName}</td>
                     <td>${formatDate(order.orderDate)}</td>
                     <td>${formatDate(order.deliveryDate)}</td>
-                    <td>${formatCurrency(order.totalAmount)}</td>
+                    <td>${formatCurrency(order.totalAmount || 0)}</td>
                     <td>
                         <span class="status-badge ${statusClass}">${statusText}</span>
                     </td>
@@ -1304,8 +1313,10 @@
         }
 
         function formatCurrency(amount) {
-            if (!amount) return '0 VNĐ';
-            return new Intl.NumberFormat('vi-VN').format(amount) + ' VNĐ';
+            if (!amount || isNaN(amount)) return '0 VNĐ';
+            // Đảm bảo amount là số
+            const numAmount = parseFloat(amount);
+            return new Intl.NumberFormat('vi-VN').format(numAmount) + ' VNĐ';
         }
 
         function updateStatistics() {
@@ -1360,6 +1371,17 @@
         function closeCreateEditOrderModal() {
             document.getElementById('createEditOrderModal').style.display = 'none';
             editingOrderId = null;
+        }
+
+        // Function to validate quantity input
+        function validateQuantity(input) {
+            let value = parseFloat(input.value);
+            if (isNaN(value) || value < 1) {
+                input.value = '';
+            } else {
+                // Làm tròn số nguyên
+                input.value = Math.floor(value);
+            }
         }
 
         // Initialize on page load

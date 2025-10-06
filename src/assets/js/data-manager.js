@@ -1,4 +1,4 @@
-// ERP Thiên Kim - Centralized Data Management System
+// ERP - Centralized Data Management System
 // Quản lý tất cả dữ liệu trong localStorage với cấu trúc rõ ràng
 
 class DataManager {
@@ -693,7 +693,7 @@ class DataManager {
         };
 
         this.saveAllData(defaultData);
-        console.log('Đã khởi tạo dữ liệu mặc định cho ERP Thiên Kim');
+        console.log('Đã khởi tạo dữ liệu mặc định cho ERP');
     }
 
     // Migration dữ liệu khi có version mới
