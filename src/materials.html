@@ -1,0 +1,1251 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nguyên vật liệu - ERP Thiên Kim</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="assets/css/styles.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-industry"></i>
+                ERP Thiên Kim
+            </div>
+            <div class="user-info">
+                <span>Xin chào, Admin</span>
+                <i class="fas fa-user-circle" style="font-size: 1.5rem;"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sidebar -->
+    <nav class="sidebar">
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <a href="index.html" class="nav-link" data-page="dashboard">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="sales-orders.html" class="nav-link" data-page="sales-orders">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span>Quản lý Đơn hàng</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="products.html" class="nav-link" data-page="products">
+                    <i class="fas fa-box"></i>
+                    <span>Quản lý Sản phẩm</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="bom.html" class="nav-link" data-page="bom">
+                    <i class="fas fa-sitemap"></i>
+                    <span>Quản lý BOM</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="inventory.html" class="nav-link" data-page="inventory">
+                    <i class="fas fa-warehouse"></i>
+                    <span>Quản lý Tồn kho</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="materials.html" class="nav-link active" data-page="materials">
+                    <i class="fas fa-cubes"></i>
+                    <span>Nguyên vật liệu</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="suppliers.html" class="nav-link" data-page="suppliers">
+                    <i class="fas fa-truck"></i>
+                    <span>Nhà cung cấp</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="procurement.html" class="nav-link" data-page="procurement">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span>Quản lý Mua hàng</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="purchase-orders.html" class="nav-link" data-page="purchase-orders">
+                    <i class="fas fa-file-invoice"></i>
+                    <span>Đơn đặt hàng (PO)</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="rfq.html" class="nav-link" data-page="rfq">
+                    <i class="fas fa-question-circle"></i>
+                    <span>Yêu cầu báo giá (RFQ)</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="reports.html" class="nav-link" data-page="reports">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Báo cáo</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="settings.html" class="nav-link" data-page="settings">
+                    <i class="fas fa-cog"></i>
+                    <span>Cài đặt</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="content-header">
+            <h1 class="content-title">Danh mục Nguyên vật liệu</h1>
+            <div class="breadcrumb">Trang chủ > Nguyên vật liệu</div>
+        </div>
+
+        <!-- Search and Filters -->
+        <div class="search-filters">
+            <div class="search-row">
+                <div class="search-input">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" class="form-input" placeholder="Tìm kiếm theo mã NVL, tên nguyên vật liệu..." onkeyup="filterMaterials()">
+                </div>
+                <select id="statusFilter" class="form-select" style="width: 200px;" onchange="filterMaterials()">
+                    <option value="">Tất cả trạng thái</option>
+                    <option value="active">Đang sử dụng</option>
+                    <option value="low-stock">Sắp hết hàng</option>
+                    <option value="out-of-stock">Hết hàng</option>
+                </select>
+                <button class="btn btn-primary" onclick="showAddMaterialModal()">
+                    <i class="fas fa-plus"></i>
+                    Thêm nguyên vật liệu
+                </button>
+            </div>
+        </div>
+
+        <!-- Materials Overview -->
+        <div class="dashboard-grid" style="grid-template-columns: repeat(4, 1fr);">
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <div class="card-icon" style="background: #e3f2fd;">
+                        <i class="fas fa-cubes" style="color: #1565c0;"></i>
+                    </div>
+                    <div>
+                        <div class="card-title">Tổng NVL</div>
+                        <div class="card-subtitle">Đang quản lý</div>
+                    </div>
+                </div>
+                <div style="text-align: center; margin-top: 1rem;">
+                    <div class="stat-number">0</div>
+                    <div class="stat-label">loại NVL</div>
+                </div>
+            </div>
+
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <div class="card-icon" style="background: #e8f5e8;">
+                        <i class="fas fa-check-circle" style="color: #2e7d32;"></i>
+                    </div>
+                    <div>
+                        <div class="card-title">Đủ tồn kho</div>
+                        <div class="card-subtitle">An toàn</div>
+                    </div>
+                </div>
+                <div style="text-align: center; margin-top: 1rem;">
+                    <div class="stat-number">0</div>
+                    <div class="stat-label">loại NVL</div>
+                </div>
+            </div>
+
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <div class="card-icon" style="background: #fff3e0;">
+                        <i class="fas fa-exclamation-triangle" style="color: #ef6c00;"></i>
+                    </div>
+                    <div>
+                        <div class="card-title">Sắp hết</div>
+                        <div class="card-subtitle">Cảnh báo</div>
+                    </div>
+                </div>
+                <div style="text-align: center; margin-top: 1rem;">
+                    <div class="stat-number">0</div>
+                    <div class="stat-label">loại NVL</div>
+                </div>
+            </div>
+
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <div class="card-icon" style="background: #ffebee;">
+                        <i class="fas fa-times-circle" style="color: #c62828;"></i>
+                    </div>
+                    <div>
+                        <div class="card-title">Hết hàng</div>
+                        <div class="card-subtitle">Cần mua ngay</div>
+                    </div>
+                </div>
+                <div style="text-align: center; margin-top: 1rem;">
+                    <div class="stat-number">0</div>
+                    <div class="stat-label">loại NVL</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Materials Table -->
+        <div class="content-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h3 style="color: #333;">Danh sách nguyên vật liệu</h3>
+                <div class="action-buttons">
+                    <button class="btn btn-secondary">
+                        <i class="fas fa-download"></i>
+                        Xuất Excel
+                    </button>
+                    <button class="btn btn-success">
+                        <i class="fas fa-upload"></i>
+                        Nhập Excel
+                    </button>
+                </div>
+            </div>
+
+            <table class="data-table" id="materialsTable">
+                <thead>
+                    <tr>
+                        <th data-sort="material-code">Mã NVL</th>
+                        <th data-sort="material-name">Tên nguyên vật liệu</th>
+                        <th data-sort="category">Phân loại</th>
+                        <th data-sort="unit">Đơn vị</th>
+                        <th data-sort="on-hand">On-Hand</th>
+                        <th data-sort="reserved">Reserved</th>
+                        <th data-sort="available">Available</th>
+                        <th data-sort="min-stock">Min Stock</th>
+                        <th data-sort="lead-time">Lead Time</th>
+                        <th>Trạng thái</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody id="materialsTableBody">
+                    <!-- Materials will be loaded here dynamically -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Add/Edit Material Modal -->
+        <div id="materialModal" class="modal-overlay" style="display: none;">
+            <div class="modal-content" style="max-width: 700px;">
+                <div class="modal-header">
+                    <h3 id="materialModalTitle">Thêm nguyên vật liệu mới</h3>
+                    <button class="modal-close" onclick="closeMaterialModal()">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="materialForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Mã nguyên vật liệu *</label>
+                                <input type="text" id="materialCode" class="form-input" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Tên nguyên vật liệu *</label>
+                                <input type="text" id="materialName" class="form-input" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Phân loại</label>
+                                <select id="materialCategory" class="form-select">
+                                    <option value="Nhựa">Nhựa</option>
+                                    <option value="Kim loại">Kim loại</option>
+                                    <option value="Cao su">Cao su</option>
+                                    <option value="Điện tử">Điện tử</option>
+                                    <option value="Hóa chất">Hóa chất</option>
+                                    <option value="Khác">Khác</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Đơn vị tính</label>
+                                <select id="materialUnit" class="form-select">
+                                    <option value="Cái">Cái</option>
+                                    <option value="Kg">Kg</option>
+                                    <option value="Mét">Mét</option>
+                                    <option value="Lít">Lít</option>
+                                    <option value="Tấm">Tấm</option>
+                                    <option value="Cuộn">Cuộn</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Tồn kho thực tế (On-Hand)</label>
+                                <input type="number" id="materialOnHand" class="form-input" min="0" value="0" onchange="calculateAvailableStock()">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Đã đặt trước (Reserved)</label>
+                                <input type="number" id="materialReserved" class="form-input" min="0" value="0" onchange="calculateAvailableStock()">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Khả dụng (Available)</label>
+                                <input type="number" id="materialAvailable" class="form-input" readonly style="background: #f8f9fa;">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Tồn kho tối thiểu *</label>
+                                <input type="number" id="materialMinStock" class="form-input" min="0" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">MOQ (Minimum Order Qty)</label>
+                                <input type="number" id="materialMOQ" class="form-input" min="1" value="100">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Lot Size</label>
+                                <input type="number" id="materialLotSize" class="form-input" min="1" value="50">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Lead Time (ngày)</label>
+                                <input type="number" id="materialLeadTime" class="form-input" min="1" value="7">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Giá nhập (VNĐ)</label>
+                                <input type="number" id="materialPrice" class="form-input" min="0">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Nhà cung cấp chính</label>
+                                <select id="materialSupplier" class="form-select">
+                                    <option value="">Chọn nhà cung cấp</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Hình ảnh nguyên vật liệu</label>
+                            <div class="image-upload-container">
+                                <input type="file" id="materialImageInput" accept="image/*" onchange="handleImageUpload(event)" style="display: none;">
+                                <div class="image-preview-container" onclick="document.getElementById('materialImageInput').click()">
+                                    <div id="materialImagePreview" class="image-preview">
+                                        <i class="fas fa-camera"></i>
+                                        <span>Click để chọn hình ảnh</span>
+                                    </div>
+                                </div>
+                                <button type="button" id="removeImageBtn" class="btn btn-sm btn-danger" onclick="removeImage()" style="display: none; margin-top: 0.5rem;">
+                                    <i class="fas fa-trash"></i> Xóa hình ảnh
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Thông số kỹ thuật</label>
+                            <textarea id="materialSpecs" class="form-input" rows="3" placeholder="Màu sắc, kích thước, độ bền..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Ghi chú</label>
+                            <textarea id="materialNotes" class="form-input" rows="2"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeMaterialModal()">Hủy</button>
+                    <button type="button" class="btn btn-primary" onclick="saveMaterial()">Lưu</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- View Material Detail Modal -->
+        <div id="viewMaterialModal" class="modal-overlay" style="display: none;">
+            <div class="modal-content" style="max-width: 700px;">
+                <div class="modal-header">
+                    <h3>Chi tiết nguyên vật liệu</h3>
+                    <button class="modal-close" onclick="closeViewMaterialModal()">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div id="materialDetailContent">
+                        <!-- Content will be populated by JavaScript -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeViewMaterialModal()">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="assets/js/shared.js"></script>
+    <script>
+        // Materials Management with localStorage
+        class MaterialsManager {
+            constructor() {
+                this.storageKey = 'tkMaterials_data';
+                this.suppliersStorageKey = 'tkSuppliers_data';
+                this.currentEditId = null;
+                this.loadData();
+                this.initializeDefaultData();
+                this.renderMaterials();
+                this.updateStatistics();
+                this.loadSupplierOptions();
+                this.handleURLParams();
+            }
+
+            loadData() {
+                this.materials = JSON.parse(localStorage.getItem(this.storageKey)) || [];
+                this.suppliers = JSON.parse(localStorage.getItem(this.suppliersStorageKey)) || [];
+            }
+
+            initializeDefaultData() {
+                if (this.materials.length === 0) {
+                    const defaultMaterials = [
+                        {
+                            id: 'NVL-001',
+                            code: 'NVL-001',
+                            name: 'Thân bút',
+                            category: 'Nhựa',
+                            unit: 'Cái',
+                            onHand: 250,
+                            reserved: 0,
+                            available: 250,
+                            minStock: 50,
+                            moq: 100,
+                            lotSize: 50,
+                            leadTime: 5,
+                            price: 3000,
+                            supplierId: 'NCC-001',
+                            supplierName: 'Công ty Nhựa ABC',
+                            specs: 'Nhựa ABS, màu đen, kích thước 14cm',
+                            notes: 'Chất lượng tốt, giao hàng nhanh',
+                            image: null,
+                            createdAt: new Date().toISOString()
+                        },
+                        {
+                            id: 'NVL-002',
+                            code: 'NVL-002',
+                            name: 'Ruột bút',
+                            category: 'Nhựa',
+                            unit: 'Cái',
+                            onHand: 180,
+                            reserved: 0,
+                            available: 180,
+                            minStock: 30,
+                            moq: 50,
+                            lotSize: 25,
+                            leadTime: 5,
+                            price: 2000,
+                            supplierId: 'NCC-001',
+                            supplierName: 'Công ty Nhựa ABC',
+                            specs: 'Nhựa PP, trong suốt',
+                            notes: '',
+                            image: null,
+                            createdAt: new Date().toISOString()
+                        },
+                        {
+                            id: 'NVL-003',
+                            code: 'NVL-003',
+                            name: 'Ngòi bi',
+                            category: 'Kim loại',
+                            unit: 'Cái',
+                            onHand: 95,
+                            reserved: 0,
+                            available: 95,
+                            minStock: 20,
+                            moq: 100,
+                            lotSize: 50,
+                            leadTime: 7,
+                            price: 1500,
+                            supplierId: 'NCC-002',
+                            supplierName: 'Kim loại Hà Nội',
+                            specs: 'Thép không gỉ, đường kính 1mm',
+                            notes: 'Kiểm tra chất lượng kỹ',
+                            image: null,
+                            createdAt: new Date().toISOString()
+                        },
+                        {
+                            id: 'NVL-004',
+                            code: 'NVL-004',
+                            name: 'Nút bấm',
+                            category: 'Nhựa',
+                            unit: 'Cái',
+                            onHand: 120,
+                            reserved: 0,
+                            available: 120,
+                            minStock: 25,
+                            moq: 50,
+                            lotSize: 25,
+                            leadTime: 5,
+                            price: 1000,
+                            supplierId: 'NCC-001',
+                            supplierName: 'Công ty Nhựa ABC',
+                            specs: 'Nhựa ABS, có lò xo bên trong',
+                            notes: '',
+                            image: null,
+                            createdAt: new Date().toISOString()
+                        },
+                        {
+                            id: 'NVL-005',
+                            code: 'NVL-005',
+                            name: 'Lò xo',
+                            category: 'Kim loại',
+                            unit: 'Cái',
+                            onHand: 200,
+                            reserved: 0,
+                            available: 200,
+                            minStock: 40,
+                            moq: 100,
+                            lotSize: 50,
+                            leadTime: 7,
+                            price: 800,
+                            supplierId: 'NCC-002',
+                            supplierName: 'Kim loại Hà Nội',
+                            specs: 'Thép carbon, đường kính 2mm, chiều dài 3cm',
+                            notes: 'Độ đàn hồi cao',
+                            image: null,
+                            createdAt: new Date().toISOString()
+                        },
+                        {
+                            id: 'NVL-006',
+                            code: 'NVL-006',
+                            name: 'Kẹp cài',
+                            category: 'Kim loại',
+                            unit: 'Cái',
+                            onHand: 85,
+                            reserved: 0,
+                            available: 85,
+                            minStock: 15,
+                            moq: 50,
+                            lotSize: 25,
+                            leadTime: 7,
+                            price: 500,
+                            supplierId: 'NCC-002',
+                            supplierName: 'Kim loại Hà Nội',
+                            specs: 'Thép mạ kẽm, chống gỉ',
+                            notes: '',
+                            image: null,
+                            createdAt: new Date().toISOString()
+                        },
+                        {
+                            id: 'NVL-007',
+                            code: 'NVL-007',
+                            name: 'Đệm ngòi',
+                            category: 'Cao su',
+                            unit: 'Cái',
+                            onHand: 15,
+                            reserved: 0,
+                            available: 15,
+                            minStock: 30,
+                            moq: 100,
+                            lotSize: 50,
+                            leadTime: 10,
+                            price: 300,
+                            supplierId: 'NCC-003',
+                            supplierName: 'Cao su Đông Nam',
+                            specs: 'Cao su tự nhiên, màu đen, đường kính 5mm',
+                            notes: 'Cảnh báo: Tồn kho thấp!',
+                            image: null,
+                            createdAt: new Date().toISOString()
+                        }
+                    ];
+                    this.saveMaterials(defaultMaterials);
+                }
+            }
+
+            saveMaterials(materials = null) {
+                const dataToSave = materials || this.materials;
+                localStorage.setItem(this.storageKey, JSON.stringify(dataToSave));
+                if (!materials) this.loadData();
+            }
+
+            addMaterial(materialData) {
+                const newMaterial = {
+                    id: materialData.code,
+                    ...materialData,
+                    createdAt: new Date().toISOString()
+                };
+                this.materials.push(newMaterial);
+                this.saveMaterials();
+                return newMaterial;
+            }
+
+            updateMaterial(id, materialData) {
+                const index = this.materials.findIndex(m => m.id === id);
+                if (index !== -1) {
+                    this.materials[index] = { ...this.materials[index], ...materialData, updatedAt: new Date().toISOString() };
+                    this.saveMaterials();
+                    return this.materials[index];
+                }
+                return null;
+            }
+
+            deleteMaterial(id) {
+                const index = this.materials.findIndex(m => m.id === id);
+                if (index !== -1) {
+                    const deleted = this.materials.splice(index, 1)[0];
+                    this.saveMaterials();
+                    return deleted;
+                }
+                return null;
+            }
+
+            getMaterial(id) {
+                return this.materials.find(m => m.id === id);
+            }
+
+            getStockStatus(material) {
+                if (material.available <= 0) return 'out-of-stock';
+                if (material.available <= material.minStock) return 'low-stock';
+                return 'active';
+            }
+
+            // Tính available stock
+            calculateAvailable(material) {
+                return material.onHand - material.reserved;
+            }
+
+            // Kiểm tra khả năng đáp ứng cho một NVL
+            checkMaterialAvailability(materialId, requiredQuantity) {
+                const material = this.getMaterial(materialId);
+                if (!material) {
+                    return {
+                        materialId: materialId,
+                        available: false,
+                        message: 'Không tìm thấy nguyên vật liệu'
+                    };
+                }
+
+                const available = material.available;
+                const shortage = Math.max(0, requiredQuantity - available);
+                
+                return {
+                    materialId: materialId,
+                    materialCode: material.code,
+                    materialName: material.name,
+                    unit: material.unit,
+                    required: requiredQuantity,
+                    onHand: material.onHand,
+                    reserved: material.reserved,
+                    available: available,
+                    shortage: shortage,
+                    status: shortage > 0 ? 'Thiếu' : 'Đủ',
+                    canFulfill: shortage === 0
+                };
+            }
+
+            renderMaterials(filteredMaterials = null) {
+                const tbody = document.getElementById('materialsTableBody');
+                tbody.innerHTML = '';
+
+                const materialsToRender = filteredMaterials || this.materials;
+
+                materialsToRender.forEach(material => {
+                    const status = this.getStockStatus(material);
+                    const statusText = {
+                        'active': 'Đủ tồn kho',
+                        'low-stock': 'Sắp hết',
+                        'out-of-stock': 'Hết hàng'
+                    };
+                    const statusClass = {
+                        'active': 'status-completed',
+                        'low-stock': 'status-processing',
+                        'out-of-stock': 'status-pending'
+                    };
+
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td data-material-code="${material.code}"><strong>${material.code}</strong></td>
+                        <td data-material-name="${material.name}">
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                ${material.image ? `<img src="${material.image}" alt="${material.name}" style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px; border: 1px solid #ddd;">` : '<div style="width: 40px; height: 40px; background: #f5f5f5; border-radius: 4px; display: flex; align-items: center; justify-content: center; border: 1px solid #ddd;"><i class="fas fa-image" style="color: #ccc; font-size: 0.8rem;"></i></div>'}
+                                <span>${material.name}</span>
+                            </div>
+                        </td>
+                        <td data-category="${material.category}">${material.category}</td>
+                        <td data-unit="${material.unit}">${material.unit}</td>
+                        <td data-on-hand="${material.onHand}">${material.onHand}</td>
+                        <td data-reserved="${material.reserved}" style="color: ${material.reserved > 0 ? '#ef6c00' : 'inherit'}; font-weight: ${material.reserved > 0 ? 'bold' : 'normal'};">
+                            ${material.reserved}
+                        </td>
+                        <td data-available="${material.available}" style="color: ${status === 'out-of-stock' ? '#c62828' : status === 'low-stock' ? '#ef6c00' : 'inherit'}; font-weight: ${status !== 'active' ? 'bold' : 'normal'};">
+                            ${material.available}
+                        </td>
+                        <td data-min-stock="${material.minStock}">${material.minStock}</td>
+                        <td data-lead-time="${material.leadTime}">${material.leadTime} ngày</td>
+                        <td>
+                            <span class="status-badge ${statusClass[status]}">
+                                ${statusText[status]}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="action-buttons">
+                                <i class="fas fa-eye action-icon" onclick="viewMaterial('${material.id}')" title="Xem chi tiết"></i>
+                                <i class="fas fa-edit action-icon" onclick="editMaterial('${material.id}')" title="Chỉnh sửa"></i>
+                                ${status !== 'active' ? `<i class="fas fa-shopping-cart action-icon" onclick="createPR('${material.id}')" title="Tạo PR" style="color: #dc3545;"></i>` : ''}
+                                <i class="fas fa-trash action-icon delete-icon" onclick="deleteMaterial('${material.id}')" title="Xóa"></i>
+                            </div>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            }
+
+            filterMaterials(searchText = '', statusFilter = '') {
+                const search = searchText.toLowerCase();
+                
+                let filtered = this.materials.filter(material => {
+                    const matchesSearch = !search || 
+                        material.code.toLowerCase().includes(search) ||
+                        material.name.toLowerCase().includes(search) ||
+                        material.category.toLowerCase().includes(search) ||
+                        (material.supplierName && material.supplierName.toLowerCase().includes(search));
+                    
+                    const materialStatus = this.getStockStatus(material);
+                    const matchesStatus = !statusFilter || materialStatus === statusFilter;
+                    
+                    return matchesSearch && matchesStatus;
+                });
+
+                return filtered;
+            }
+
+            updateStatistics() {
+                const total = this.materials.length;
+                const active = this.materials.filter(m => this.getStockStatus(m) === 'active').length;
+                const lowStock = this.materials.filter(m => this.getStockStatus(m) === 'low-stock').length;
+                const outOfStock = this.materials.filter(m => this.getStockStatus(m) === 'out-of-stock').length;
+
+                const cards = document.querySelectorAll('.dashboard-card .stat-number');
+                if (cards[0]) cards[0].textContent = total;
+                if (cards[1]) cards[1].textContent = active;
+                if (cards[2]) cards[2].textContent = lowStock;
+                if (cards[3]) cards[3].textContent = outOfStock;
+            }
+
+            // Đặt trước stock (khi có sales order)
+            reserveStock(materialId, quantity) {
+                const material = this.getMaterial(materialId);
+                if (material && material.available >= quantity) {
+                    material.reserved = (material.reserved || 0) + quantity;
+                    material.available = material.onHand - material.reserved;
+                    this.saveMaterials();
+                    return true;
+                }
+                return false;
+            }
+
+            // Giải phóng stock (khi hủy order)
+            releaseStock(materialId, quantity) {
+                const material = this.getMaterial(materialId);
+                if (material && material.reserved >= quantity) {
+                    material.reserved = material.reserved - quantity;
+                    material.available = material.onHand - material.reserved;
+                    this.saveMaterials();
+                    return true;
+                }
+                return false;
+            }
+
+            // Nhận hàng (khi PO về)
+            receiveStock(materialId, quantity) {
+                const material = this.getMaterial(materialId);
+                if (material) {
+                    material.onHand = (material.onHand || 0) + quantity;
+                    material.available = material.onHand - (material.reserved || 0);
+                    this.saveMaterials();
+                    return true;
+                }
+                return false;
+            }
+
+            // Tiêu thụ stock (khi sản xuất)
+            consumeStock(materialId, quantity) {
+                const material = this.getMaterial(materialId);
+                if (material && material.reserved >= quantity) {
+                    material.onHand = material.onHand - quantity;
+                    material.reserved = material.reserved - quantity;
+                    material.available = material.onHand - material.reserved;
+                    this.saveMaterials();
+                    return true;
+                }
+                return false;
+            }
+
+            loadSupplierOptions() {
+                const select = document.getElementById('materialSupplier');
+                if (select) {
+                    const defaultOption = '<option value="">Chọn nhà cung cấp</option>';
+                    select.innerHTML = defaultOption;
+                    
+                    this.suppliers.forEach(supplier => {
+                        const option = document.createElement('option');
+                        option.value = supplier.id;
+                        option.textContent = `${supplier.code} - ${supplier.name}`;
+                        select.appendChild(option);
+                    });
+                }
+            }
+
+            handleURLParams() {
+                const params = new URLSearchParams(window.location.search);
+                const materialId = params.get('id');
+                
+                if (materialId) {
+                    setTimeout(() => {
+                        const material = this.getMaterial(materialId);
+                        if (material) {
+                            viewMaterial(materialId);
+                        } else {
+                            window.notifications.warning(`Không tìm thấy nguyên vật liệu ${materialId}`);
+                        }
+                    }, 500);
+                }
+            }
+        }
+
+        // Initialize Materials Manager
+        const materialsManager = new MaterialsManager();
+
+        // Modal functions
+        function showAddMaterialModal() {
+            document.getElementById('materialModalTitle').textContent = 'Thêm nguyên vật liệu mới';
+            document.getElementById('materialForm').reset();
+            materialsManager.currentEditId = null;
+            document.getElementById('materialCode').disabled = false;
+            resetImagePreview();
+            document.getElementById('materialModal').style.display = 'flex';
+        }
+
+        function closeMaterialModal() {
+            document.getElementById('materialModal').style.display = 'none';
+            materialsManager.currentEditId = null;
+            resetImagePreview();
+        }
+
+        function saveMaterial() {
+            const form = document.getElementById('materialForm');
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+
+            const supplierId = document.getElementById('materialSupplier').value;
+            const supplier = materialsManager.suppliers.find(s => s.id === supplierId);
+
+            const materialData = {
+                code: document.getElementById('materialCode').value,
+                name: document.getElementById('materialName').value,
+                category: document.getElementById('materialCategory').value,
+                unit: document.getElementById('materialUnit').value,
+                onHand: parseInt(document.getElementById('materialOnHand').value) || 0,
+                reserved: parseInt(document.getElementById('materialReserved').value) || 0,
+                available: parseInt(document.getElementById('materialAvailable').value) || 0,
+                minStock: parseInt(document.getElementById('materialMinStock').value) || 0,
+                moq: parseInt(document.getElementById('materialMOQ').value) || 100,
+                lotSize: parseInt(document.getElementById('materialLotSize').value) || 50,
+                leadTime: parseInt(document.getElementById('materialLeadTime').value) || 7,
+                price: parseInt(document.getElementById('materialPrice').value) || 0,
+                supplierId: supplierId,
+                supplierName: supplier ? supplier.name : '',
+                specs: document.getElementById('materialSpecs').value,
+                notes: document.getElementById('materialNotes').value,
+                image: window.currentMaterialImage || null
+            };
+
+            try {
+                if (materialsManager.currentEditId) {
+                    // Update existing material
+                    materialsManager.updateMaterial(materialsManager.currentEditId, materialData);
+                    window.notifications.success(`Đã cập nhật nguyên vật liệu ${materialData.code}`);
+                } else {
+                    // Check if material code already exists
+                    if (materialsManager.getMaterial(materialData.code)) {
+                        window.notifications.error(`Mã nguyên vật liệu ${materialData.code} đã tồn tại!`);
+                        return;
+                    }
+                    // Add new material
+                    materialsManager.addMaterial(materialData);
+                    window.notifications.success(`Đã thêm nguyên vật liệu ${materialData.code}`);
+                }
+
+                materialsManager.renderMaterials();
+                materialsManager.updateStatistics();
+                closeMaterialModal();
+            } catch (error) {
+                window.notifications.error('Có lỗi xảy ra khi lưu nguyên vật liệu');
+                console.error('Error saving material:', error);
+            }
+        }
+
+        // Materials specific functionality
+        function viewMaterial(materialId) {
+            const material = materialsManager.getMaterial(materialId);
+            if (material) {
+                const status = materialsManager.getStockStatus(material);
+                const statusText = {
+                    'active': 'Đủ tồn kho',
+                    'low-stock': 'Sắp hết hàng',
+                    'out-of-stock': 'Hết hàng'
+                };
+                
+                const statusClass = {
+                    'active': 'status-completed',
+                    'low-stock': 'status-processing',
+                    'out-of-stock': 'status-pending'
+                };
+
+                const createdDate = new Date(material.createdAt).toLocaleDateString('vi-VN');
+                
+                const detailContent = `
+                    <div class="material-detail">
+                        <div class="detail-row">
+                            <div class="detail-label">Hình ảnh:</div>
+                            <div class="detail-value">
+                                ${material.image ? `<img src="${material.image}" alt="${material.name}" style="width: 100px; height: 100px; object-fit: cover; border-radius: 8px; border: 1px solid #ddd;">` : '<div style="width: 100px; height: 100px; background: #f5f5f5; border-radius: 8px; display: flex; align-items: center; justify-content: center; border: 1px solid #ddd;"><i class="fas fa-image" style="color: #ccc; font-size: 1.5rem;"></i></div>'}
+                            </div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Mã nguyên vật liệu:</div>
+                            <div class="detail-value"><strong>${material.code}</strong></div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Tên nguyên vật liệu:</div>
+                            <div class="detail-value">${material.name}</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Phân loại:</div>
+                            <div class="detail-value">${material.category}</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Đơn vị tính:</div>
+                            <div class="detail-value">${material.unit}</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Tồn kho hiện tại:</div>
+                            <div class="detail-value" style="color: ${status === 'out-of-stock' ? '#c62828' : status === 'low-stock' ? '#ef6c00' : 'inherit'}; font-weight: ${status !== 'active' ? 'bold' : 'normal'};">
+                                ${material.stock} ${material.unit}
+                            </div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Tồn kho tối thiểu:</div>
+                            <div class="detail-value">${material.minStock} ${material.unit}</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Giá nhập:</div>
+                            <div class="detail-value">${material.price.toLocaleString('vi-VN')} VNĐ</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Nhà cung cấp:</div>
+                            <div class="detail-value">${material.supplierName || 'Chưa có thông tin'}</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Trạng thái:</div>
+                            <div class="detail-value">
+                                <span class="status-badge ${statusClass[status]}">
+                                    ${statusText[status]}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Thông số kỹ thuật:</div>
+                            <div class="detail-value">${material.specs || 'Không có thông tin'}</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Ngày tạo:</div>
+                            <div class="detail-value">${createdDate}</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Ghi chú:</div>
+                            <div class="detail-value">${material.notes || 'Không có ghi chú'}</div>
+                        </div>
+                    </div>
+                `;
+                
+                document.getElementById('materialDetailContent').innerHTML = detailContent;
+                document.getElementById('viewMaterialModal').style.display = 'flex';
+            }
+        }
+
+        function closeViewMaterialModal() {
+            document.getElementById('viewMaterialModal').style.display = 'none';
+        }
+        
+        function editMaterial(materialId) {
+            const material = materialsManager.getMaterial(materialId);
+            if (material) {
+                document.getElementById('materialModalTitle').textContent = 'Chỉnh sửa nguyên vật liệu';
+                document.getElementById('materialCode').value = material.code;
+                document.getElementById('materialName').value = material.name;
+                document.getElementById('materialCategory').value = material.category;
+                document.getElementById('materialUnit').value = material.unit;
+                document.getElementById('materialOnHand').value = material.onHand || 0;
+                document.getElementById('materialReserved').value = material.reserved || 0;
+                document.getElementById('materialAvailable').value = material.available || 0;
+                document.getElementById('materialMinStock').value = material.minStock;
+                document.getElementById('materialMOQ').value = material.moq || 100;
+                document.getElementById('materialLotSize').value = material.lotSize || 50;
+                document.getElementById('materialLeadTime').value = material.leadTime || 7;
+                document.getElementById('materialPrice').value = material.price;
+                document.getElementById('materialSupplier').value = material.supplierId || '';
+                document.getElementById('materialSpecs').value = material.specs || '';
+                document.getElementById('materialNotes').value = material.notes || '';
+                
+                // Set image preview
+                if (material.image) {
+                    setImagePreview(material.image);
+                } else {
+                    resetImagePreview();
+                }
+                
+                // Disable code field when editing
+                document.getElementById('materialCode').disabled = true;
+                
+                materialsManager.currentEditId = materialId;
+                document.getElementById('materialModal').style.display = 'flex';
+            }
+        }
+        
+        function deleteMaterial(materialId) {
+            const material = materialsManager.getMaterial(materialId);
+            if (material && confirm(`Bạn có chắc chắn muốn xóa nguyên vật liệu "${material.name}" (${materialId})?`)) {
+                materialsManager.deleteMaterial(materialId);
+                materialsManager.renderMaterials();
+                materialsManager.updateStatistics();
+                window.notifications.success(`Đã xóa nguyên vật liệu ${materialId}`);
+            }
+        }
+
+        // Filter function
+        function filterMaterials() {
+            const searchInput = document.getElementById('searchInput');
+            const statusFilter = document.getElementById('statusFilter');
+            
+            const searchText = searchInput ? searchInput.value : '';
+            const statusValue = statusFilter ? statusFilter.value : '';
+            
+            const filteredMaterials = materialsManager.filterMaterials(searchText, statusValue);
+            materialsManager.renderMaterials(filteredMaterials);
+        }
+
+        function createPR(materialId) {
+            const material = materialsManager.getMaterial(materialId);
+            if (material) {
+                window.notifications.info(`Tạo yêu cầu mua hàng cho ${material.name}`);
+                window.location.href = `procurement.html?material=${materialId}`;
+            }
+        }
+
+        // Tính available stock trong form
+        function calculateAvailableStock() {
+            const onHand = parseInt(document.getElementById('materialOnHand').value) || 0;
+            const reserved = parseInt(document.getElementById('materialReserved').value) || 0;
+            const available = onHand - reserved;
+            
+            document.getElementById('materialAvailable').value = Math.max(0, available);
+        }
+
+        // Image handling functions
+        function handleImageUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                // Check file size (max 2MB)
+                if (file.size > 2 * 1024 * 1024) {
+                    window.notifications.error('Kích thước hình ảnh không được vượt quá 2MB');
+                    return;
+                }
+
+                // Check file type
+                if (!file.type.startsWith('image/')) {
+                    window.notifications.error('Vui lòng chọn file hình ảnh');
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const base64Image = e.target.result;
+                    setImagePreview(base64Image);
+                    window.currentMaterialImage = base64Image;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function setImagePreview(imageSrc) {
+            const preview = document.getElementById('materialImagePreview');
+            const removeBtn = document.getElementById('removeImageBtn');
+            
+            preview.innerHTML = `<img src="${imageSrc}" alt="Preview" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;">`;
+            removeBtn.style.display = 'block';
+            window.currentMaterialImage = imageSrc;
+        }
+
+        function resetImagePreview() {
+            const preview = document.getElementById('materialImagePreview');
+            const removeBtn = document.getElementById('removeImageBtn');
+            
+            preview.innerHTML = `
+                <i class="fas fa-camera"></i>
+                <span>Click để chọn hình ảnh</span>
+            `;
+            removeBtn.style.display = 'none';
+            window.currentMaterialImage = null;
+            
+            // Reset file input
+            const fileInput = document.getElementById('materialImageInput');
+            if (fileInput) fileInput.value = '';
+        }
+
+        function removeImage() {
+            resetImagePreview();
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const materialModal = document.getElementById('materialModal');
+            const viewModal = document.getElementById('viewMaterialModal');
+            
+            if (event.target === materialModal) {
+                closeMaterialModal();
+            }
+            if (event.target === viewModal) {
+                closeViewMaterialModal();
+            }
+        }
+
+        // Custom styles
+        const customStyles = `
+            .action-buttons {
+                display: flex;
+                gap: 0.8rem;
+                justify-content: center;
+            }
+            .action-icon {
+                color: #666;
+                cursor: pointer;
+                font-size: 1rem;
+                padding: 0.3rem;
+                transition: color 0.2s ease;
+            }
+            .action-icon:hover {
+                color: #007bff;
+            }
+            .delete-icon:hover {
+                color: #dc3545;
+            }
+            .image-upload-container {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .image-preview-container {
+                cursor: pointer;
+                border: 2px dashed #ddd;
+                border-radius: 8px;
+                padding: 1rem;
+                width: 200px;
+                height: 150px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: border-color 0.3s ease;
+            }
+            .image-preview-container:hover {
+                border-color: #007bff;
+            }
+            .image-preview {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 0.5rem;
+                color: #666;
+                text-align: center;
+                width: 100%;
+                height: 100%;
+            }
+            .image-preview i {
+                font-size: 2rem;
+                color: #ccc;
+            }
+            .image-preview span {
+                font-size: 0.9rem;
+            }
+            .modal-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.5);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 1000;
+            }
+            .modal-content {
+                background: white;
+                border-radius: 8px;
+                width: 90%;
+                max-height: 90%;
+                overflow-y: auto;
+            }
+            .modal-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 1rem 1.5rem;
+                border-bottom: 1px solid #dee2e6;
+            }
+            .modal-header h3 {
+                margin: 0;
+                color: #333;
+            }
+            .modal-close {
+                background: none;
+                border: none;
+                font-size: 1.5rem;
+                cursor: pointer;
+                color: #666;
+            }
+            .modal-body {
+                padding: 1.5rem;
+            }
+            .modal-footer {
+                display: flex;
+                justify-content: flex-end;
+                gap: 0.5rem;
+                padding: 1rem 1.5rem;
+                border-top: 1px solid #dee2e6;
+            }
+            .material-detail {
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .detail-row {
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-start;
+                padding: 0.5rem 0;
+                border-bottom: 1px solid #f0f0f0;
+            }
+            .detail-row:last-child {
+                border-bottom: none;
+            }
+            .detail-label {
+                font-weight: 600;
+                color: #555;
+                min-width: 180px;
+                flex-shrink: 0;
+            }
+            .detail-value {
+                flex: 1;
+                text-align: right;
+                color: #333;
+            }
+        `;
+        
+        const styleSheet = document.createElement('style');
+        styleSheet.textContent = customStyles;
+        document.head.appendChild(styleSheet);
+    </script>
+</body>
+</html>

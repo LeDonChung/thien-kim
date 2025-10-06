@@ -1,0 +1,2152 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đơn đặt hàng (PO) - ERP Thiên Kim</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="assets/css/styles.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-industry"></i>
+                ERP Thiên Kim
+            </div>
+            <div class="user-info">
+                <span>Xin chào, Admin</span>
+                <i class="fas fa-user-circle" style="font-size: 1.5rem;"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sidebar -->
+    <nav class="sidebar">
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <a href="index.html" class="nav-link" data-page="dashboard">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="sales-orders.html" class="nav-link" data-page="sales-orders">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span>Quản lý Đơn hàng</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="products.html" class="nav-link" data-page="products">
+                    <i class="fas fa-box"></i>
+                    <span>Quản lý Sản phẩm</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="bom.html" class="nav-link" data-page="bom">
+                    <i class="fas fa-sitemap"></i>
+                    <span>Quản lý BOM</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="inventory.html" class="nav-link" data-page="inventory">
+                    <i class="fas fa-warehouse"></i>
+                    <span>Quản lý Tồn kho</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="materials.html" class="nav-link" data-page="materials">
+                    <i class="fas fa-cubes"></i>
+                    <span>Nguyên vật liệu</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="suppliers.html" class="nav-link" data-page="suppliers">
+                    <i class="fas fa-truck"></i>
+                    <span>Nhà cung cấp</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="procurement.html" class="nav-link" data-page="procurement">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span>Quản lý Mua hàng</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="purchase-orders.html" class="nav-link active" data-page="purchase-orders">
+                    <i class="fas fa-file-invoice"></i>
+                    <span>Đơn đặt hàng (PO)</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="rfq.html" class="nav-link" data-page="rfq">
+                    <i class="fas fa-question-circle"></i>
+                    <span>Yêu cầu báo giá (RFQ)</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="reports.html" class="nav-link" data-page="reports">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Báo cáo</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="settings.html" class="nav-link" data-page="settings">
+                    <i class="fas fa-cog"></i>
+                    <span>Cài đặt</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="content-header">
+            <h1 class="content-title">Quản lý Đơn đặt hàng (PO)</h1>
+            <div class="breadcrumb">Trang chủ > Đơn đặt hàng (PO)</div>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon" style="color: #007bff;">
+                    <i class="fas fa-file-invoice"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-number" id="totalPOs">0</div>
+                    <div class="stat-label">Tổng PO</div>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon" style="color: #ffc107;">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-number" id="pendingPOs">0</div>
+                    <div class="stat-label">Đang chờ xác nhận</div>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon" style="color: #28a745;">
+                    <i class="fas fa-truck"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-number" id="shippedPOs">0</div>
+                    <div class="stat-label">Đang giao hàng</div>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon" style="color: #dc3545;">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-number" id="overduePOs">0</div>
+                    <div class="stat-label">Quá hạn giao</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Filters -->
+        <div class="quick-filters">
+            <button class="quick-filter-btn active" onclick="quickFilter('all')">
+                <i class="fas fa-list"></i>
+                Tất cả
+            </button>
+            <button class="quick-filter-btn" onclick="quickFilter('pending')">
+                <i class="fas fa-clock"></i>
+                Chờ xác nhận
+            </button>
+            <button class="quick-filter-btn" onclick="quickFilter('overdue')">
+                <i class="fas fa-exclamation-triangle"></i>
+                Quá hạn
+            </button>
+            <button class="quick-filter-btn" onclick="quickFilter('today')">
+                <i class="fas fa-calendar-day"></i>
+                Hôm nay
+            </button>
+            <button class="quick-filter-btn" onclick="quickFilter('week')">
+                <i class="fas fa-calendar-week"></i>
+                Tuần này
+            </button>
+        </div>
+
+        <!-- PO Management -->
+        <div class="content-card">
+            <div class="card-header">
+                <h2 class="card-title">
+                    <i class="fas fa-file-invoice"></i>
+                    Danh sách Đơn đặt hàng
+                </h2>
+                <div class="action-buttons">
+                    <button class="btn btn-success" onclick="exportPOs()">
+                        <i class="fas fa-download"></i>
+                        Xuất Excel
+                    </button>
+                    <button class="btn btn-primary" onclick="showCreatePOModal()">
+                        <i class="fas fa-plus"></i>
+                        Tạo PO mới
+                    </button>
+                </div>
+            </div>
+            
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Mã PO</th>
+                            <th>Ngày tạo</th>
+                            <th>Nhà cung cấp</th>
+                            <th>Vật liệu</th>
+                            <th>Số lượng</th>
+                            <th>Tổng giá trị</th>
+                            <th>Ngày giao dự kiến</th>
+                            <th>Trạng thái</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="poTableBody">
+                        <tr>
+                            <td colspan="9" style="text-align: center; padding: 2rem; color: #666;">
+                                <i class="fas fa-spinner fa-spin"></i>
+                                Đang tải dữ liệu...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Create PO Modal -->
+        <div class="modal" id="createPOModal" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">
+                            <i class="fas fa-plus"></i>
+                            Tạo PO mới
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="closeCreatePOModal()"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="poForm">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="poSupplier">Nhà cung cấp <span class="required">*</span></label>
+                                    <select id="poSupplier" name="supplierId" class="form-input" required onchange="updateSupplierInfo()">
+                                        <option value="">Chọn nhà cung cấp</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="poDeliveryDate">Ngày giao hàng <span class="required">*</span></label>
+                                    <input type="date" id="poDeliveryDate" name="deliveryDate" class="form-input" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Chi tiết đơn hàng</label>
+                                <div id="poItems">
+                                    <div class="po-item" data-index="0">
+                                        <div class="form-row">
+                                            <div class="form-group">
+                                                <label>Vật liệu</label>
+                                                <select name="items[0][materialId]" class="form-input material-select" required onchange="updateItemInfo(0)">
+                                                    <option value="">Chọn vật liệu</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Số lượng</label>
+                                                <input type="number" name="items[0][quantity]" class="form-input quantity-input" required min="1" onchange="calculateItemTotal(0)">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Đơn giá</label>
+                                                <input type="number" name="items[0][unitPrice]" class="form-input price-input" required min="0" onchange="calculateItemTotal(0)">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Thành tiền</label>
+                                                <input type="text" class="form-input total-display" readonly>
+                                            </div>
+                                            <div class="form-group">
+                                                <button type="button" class="btn btn-danger btn-sm" onclick="removeItem(0)" style="margin-top: 1.5rem;" disabled>
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn btn-secondary btn-sm" onclick="addItem()">
+                                    <i class="fas fa-plus"></i>
+                                    Thêm vật liệu
+                                </button>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="poNotes">Ghi chú</label>
+                                    <textarea id="poNotes" name="notes" class="form-textarea" rows="3" 
+                                              placeholder="Điều kiện thanh toán, yêu cầu đặc biệt..."></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label>Tổng giá trị đơn hàng</label>
+                                    <div class="form-input" style="font-weight: bold; font-size: 1.2em; color: #28a745;" id="totalValue">0 VNĐ</div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" onclick="closeCreatePOModal()">Hủy</button>
+                        <button type="button" class="btn btn-primary" onclick="savePO()">
+                            <i class="fas fa-save"></i>
+                            Tạo PO
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Receive Goods Modal -->
+        <div class="modal" id="receiveGoodsModal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">
+                            <i class="fas fa-box-open"></i>
+                            Nhận hàng
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="closeReceiveModal()"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="receiveForm">
+                            <input type="hidden" id="receivePOId" name="poId">
+                            <div class="form-group">
+                                <label for="receiveQuantity">Số lượng nhận <span class="required">*</span></label>
+                                <input type="number" id="receiveQuantity" name="quantity" class="form-input" required min="1">
+                                <small class="form-text text-muted">Số lượng còn lại: <span id="remainingQuantity">0</span></small>
+                            </div>
+                            <div class="form-group">
+                                <label for="receiveDate">Ngày nhận <span class="required">*</span></label>
+                                <input type="date" id="receiveDate" name="receiveDate" class="form-input" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="receiveNotes">Ghi chú</label>
+                                <textarea id="receiveNotes" name="notes" class="form-textarea" rows="3" 
+                                          placeholder="Tình trạng hàng hóa, chất lượng..."></textarea>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" onclick="closeReceiveModal()">Hủy</button>
+                        <button type="button" class="btn btn-success" onclick="confirmReceiveGoods()">
+                            <i class="fas fa-check"></i>
+                            Xác nhận nhận hàng
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </main>
+
+    <script src="assets/js/shared.js"></script>
+    <script>
+        class PurchaseOrderManager {
+            constructor() {
+                this.pos = [];
+                this.materials = [];
+                this.suppliers = [];
+                this.rfqs = [];
+                this.receipts = [];
+                
+                this.poStorageKey = 'tkPurchaseOrders_data';
+                this.materialsStorageKey = 'tkMaterials_data';
+                this.suppliersStorageKey = 'tkSuppliers_data';
+                this.rfqStorageKey = 'tkRFQ_data';
+                this.receiptsStorageKey = 'tkReceipts_data';
+                
+                this.itemIndex = 1;
+                
+                this.loadData();
+                this.initializeDefaultData();
+                this.render();
+                this.handleURLParams();
+            }
+
+            loadData() {
+                this.pos = JSON.parse(localStorage.getItem(this.poStorageKey)) || [];
+                this.materials = JSON.parse(localStorage.getItem(this.materialsStorageKey)) || [];
+                this.suppliers = JSON.parse(localStorage.getItem(this.suppliersStorageKey)) || [];
+                this.rfqs = JSON.parse(localStorage.getItem(this.rfqStorageKey)) || [];
+                this.receipts = JSON.parse(localStorage.getItem(this.receiptsStorageKey)) || [];
+            }
+
+            saveData(type) {
+                switch(type) {
+                    case 'po':
+                        localStorage.setItem(this.poStorageKey, JSON.stringify(this.pos));
+                        break;
+                    case 'receipts':
+                        localStorage.setItem(this.receiptsStorageKey, JSON.stringify(this.receipts));
+                        break;
+                }
+            }
+
+            initializeDefaultData() {
+                // Initialize materials if not exist
+                if (this.materials.length === 0) {
+                    this.materials = [
+                        { id: 'NVL-001', code: 'NVL-001', name: 'Thân bút', unit: 'Cái', price: 3000 },
+                        { id: 'NVL-002', code: 'NVL-002', name: 'Ruột bút', unit: 'Cái', price: 2000 },
+                        { id: 'NVL-007', code: 'NVL-007', name: 'Đệm ngòi', unit: 'Cái', price: 300 }
+                    ];
+                    localStorage.setItem(this.materialsStorageKey, JSON.stringify(this.materials));
+                }
+
+                // Initialize suppliers if not exist
+                if (this.suppliers.length === 0) {
+                    this.suppliers = [
+                        { id: 'NCC-001', code: 'NCC-001', name: 'Công ty Nhựa ABC', status: 'active', leadTime: 7 },
+                        { id: 'NCC-002', code: 'NCC-002', name: 'Kim loại Hà Nội', status: 'active', leadTime: 10 },
+                        { id: 'NCC-003', code: 'NCC-003', name: 'Cao su Đông Nam', status: 'active', leadTime: 14 }
+                    ];
+                    localStorage.setItem(this.suppliersStorageKey, JSON.stringify(this.suppliers));
+                }
+
+                // Initialize sample POs
+                if (this.pos.length === 0) {
+                    this.pos = [
+                        {
+                            id: 'PO-20241002-001',
+                            supplierId: 'NCC-001',
+                            supplierName: 'Công ty Nhựa ABC',
+                            deliveryDate: new Date(Date.now() + 14 * 86400000).toISOString().split('T')[0],
+                            status: 'confirmed',
+                            totalValue: 1500000,
+                            items: [
+                                { 
+                                    materialId: 'NVL-002', 
+                                    materialName: 'Ruột bút', 
+                                    quantity: 100, 
+                                    unitPrice: 15000, 
+                                    total: 1500000,
+                                    received: 0
+                                }
+                            ],
+                            notes: 'Giao hàng tại kho Hà Nội',
+                            createdAt: new Date(Date.now() - 3 * 86400000).toISOString(),
+                            confirmedAt: new Date(Date.now() - 2 * 86400000).toISOString()
+                        },
+                        {
+                            id: 'PO-20241002-002',
+                            supplierId: 'NCC-002',
+                            supplierName: 'Kim loại Hà Nội',
+                            deliveryDate: new Date(Date.now() + 7 * 86400000).toISOString().split('T')[0],
+                            status: 'sent',
+                            totalValue: 900000,
+                            items: [
+                                { 
+                                    materialId: 'NVL-007', 
+                                    materialName: 'Đệm ngòi', 
+                                    quantity: 3000, 
+                                    unitPrice: 300, 
+                                    total: 900000,
+                                    received: 0
+                                }
+                            ],
+                            notes: 'Cần giao gấp',
+                            createdAt: new Date(Date.now() - 86400000).toISOString(),
+                            sentAt: new Date(Date.now() - 86400000).toISOString()
+                        }
+                    ];
+                    this.saveData('po');
+                }
+            }
+
+            render() {
+                this.updateStatistics();
+                this.renderPOTable();
+                this.populateFormSelectors();
+            }
+
+            updateStatistics() {
+                const total = this.pos.length;
+                const pending = this.pos.filter(po => po.status === 'draft' || po.status === 'sent').length;
+                const shipped = this.pos.filter(po => po.status === 'shipped' || po.status === 'confirmed').length;
+                const overdue = this.pos.filter(po => 
+                    (po.status === 'confirmed' || po.status === 'shipped') && 
+                    new Date(po.deliveryDate) < new Date()
+                ).length;
+
+                document.getElementById('totalPOs').textContent = total;
+                document.getElementById('pendingPOs').textContent = pending;
+                document.getElementById('shippedPOs').textContent = shipped;
+                document.getElementById('overduePOs').textContent = overdue;
+            }
+
+            applyFilters() {
+                this.filteredPOs = this.pos;
+
+                this.sortPOs();
+                this.renderPOTable();
+                this.updatePagination();
+            }
+
+            sortPOs() {
+                this.filteredPOs.sort((a, b) => {
+                    let aValue = a[this.sortField];
+                    let bValue = b[this.sortField];
+
+                    // Handle different data types
+                    if (this.sortField === 'totalValue') {
+                        aValue = parseFloat(aValue);
+                        bValue = parseFloat(bValue);
+                    } else if (this.sortField === 'createdAt' || this.sortField === 'deliveryDate') {
+                        aValue = new Date(aValue);
+                        bValue = new Date(bValue);
+                    } else {
+                        aValue = aValue.toString().toLowerCase();
+                        bValue = bValue.toString().toLowerCase();
+                    }
+
+                    if (aValue < bValue) return this.sortDirection === 'asc' ? -1 : 1;
+                    if (aValue > bValue) return this.sortDirection === 'asc' ? 1 : -1;
+                    return 0;
+                });
+            }
+
+            handleSort(field) {
+                if (this.sortField === field) {
+                    this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+                } else {
+                    this.sortField = field;
+                    this.sortDirection = 'asc';
+                }
+
+                // Update sort indicators
+                document.querySelectorAll('.sortable').forEach(header => {
+                    header.classList.remove('sorted');
+                    const icon = header.querySelector('i');
+                    icon.className = 'fas fa-sort';
+                });
+
+                const currentHeader = document.querySelector(`[data-sort="${field}"]`);
+                currentHeader.classList.add('sorted');
+                const icon = currentHeader.querySelector('i');
+                icon.className = this.sortDirection === 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down';
+
+                this.applyFilters();
+            }
+
+            updatePagination() {
+                const total = this.filteredPOs.length;
+                const totalPages = Math.ceil(total / this.itemsPerPage);
+                
+                document.getElementById('displayedCount').textContent = Math.min(total, this.itemsPerPage);
+                document.getElementById('totalCount').textContent = total;
+
+                const pagination = document.getElementById('tablePagination');
+                if (totalPages <= 1) {
+                    pagination.style.display = 'none';
+                    return;
+                }
+
+                pagination.style.display = 'flex';
+                
+                const start = (this.currentPage - 1) * this.itemsPerPage + 1;
+                const end = Math.min(this.currentPage * this.itemsPerPage, total);
+                
+                document.getElementById('paginationStart').textContent = start;
+                document.getElementById('paginationEnd').textContent = end;
+                document.getElementById('paginationTotal').textContent = total;
+
+                // Update navigation buttons
+                document.getElementById('prevBtn').disabled = this.currentPage <= 1;
+                document.getElementById('nextBtn').disabled = this.currentPage >= totalPages;
+
+                // Generate page numbers
+                this.generatePageNumbers(totalPages);
+            }
+
+            generatePageNumbers(totalPages) {
+                const pageNumbers = document.getElementById('pageNumbers');
+                pageNumbers.innerHTML = '';
+
+                const maxVisible = 5;
+                let startPage = Math.max(1, this.currentPage - Math.floor(maxVisible / 2));
+                let endPage = Math.min(totalPages, startPage + maxVisible - 1);
+
+                if (endPage - startPage + 1 < maxVisible) {
+                    startPage = Math.max(1, endPage - maxVisible + 1);
+                }
+
+                for (let i = startPage; i <= endPage; i++) {
+                    const pageBtn = document.createElement('button');
+                    pageBtn.className = `page-number ${i === this.currentPage ? 'active' : ''}`;
+                    pageBtn.textContent = i;
+                    pageBtn.onclick = () => this.goToPage(i);
+                    pageNumbers.appendChild(pageBtn);
+                }
+            }
+
+            goToPage(page) {
+                this.currentPage = page;
+                this.renderPOTable();
+                this.updatePagination();
+            }
+
+            previousPage() {
+                if (this.currentPage > 1) {
+                    this.goToPage(this.currentPage - 1);
+                }
+            }
+
+            nextPage() {
+                const totalPages = Math.ceil(this.filteredPOs.length / this.itemsPerPage);
+                if (this.currentPage < totalPages) {
+                    this.goToPage(this.currentPage + 1);
+                }
+            }
+
+            populateSupplierFilter() {
+                const supplierFilter = document.getElementById('supplierFilter');
+                if (!supplierFilter) return;
+
+                supplierFilter.innerHTML = '<option value="">Tất cả nhà cung cấp</option>';
+                this.suppliers.filter(s => s.status === 'active').forEach(supplier => {
+                    const option = document.createElement('option');
+                    option.value = supplier.id;
+                    option.textContent = supplier.name;
+                    supplierFilter.appendChild(option);
+                });
+            }
+
+            renderPOTable() {
+                const tbody = document.getElementById('poTableBody');
+                tbody.innerHTML = '';
+
+                if (this.pos.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="9" style="text-align: center; color: #666;">Chưa có PO nào</td></tr>';
+                    return;
+                }
+
+                this.pos.forEach(po => {
+                    const isOverdue = new Date(po.deliveryDate) < new Date() && 
+                                     (po.status === 'confirmed' || po.status === 'shipped');
+                    
+                    const statusClass = {
+                        'draft': 'status-new',
+                        'sent': 'status-processing',
+                        'confirmed': 'status-processing',
+                        'shipped': 'status-processing',
+                        'received': 'status-completed',
+                        'cancelled': 'status-cancelled'
+                    };
+                    
+                    const statusText = {
+                        'draft': 'Nháp',
+                        'sent': 'Đã gửi',
+                        'confirmed': 'Đã xác nhận',
+                        'shipped': 'Đang giao',
+                        'received': 'Đã nhận',
+                        'cancelled': 'Đã hủy'
+                    };
+
+                    // Get main item for summary display
+                    const mainItem = po.items[0];
+                    const itemsDisplay = po.items.length > 1 ? 
+                        `${mainItem.materialName} (+${po.items.length - 1} mục khác)` : 
+                        mainItem.materialName;
+                    const quantityDisplay = po.items.length > 1 ? 
+                        'Nhiều mục' : 
+                        `${mainItem.quantity} ${this.materials.find(m => m.id === mainItem.materialId)?.unit || ''}`;
+
+                    const row = document.createElement('tr');
+                    if (isOverdue) row.classList.add('overdue-row');
+                    
+                    row.innerHTML = `
+                        <td><strong>${po.id}</strong></td>
+                        <td>${new Date(po.createdAt).toLocaleDateString('vi-VN')}</td>
+                        <td>${po.supplierName}</td>
+                        <td title="${po.items.map(i => `${i.materialName}: ${i.quantity}`).join('\n')}">${itemsDisplay}</td>
+                        <td>${quantityDisplay}</td>
+                        <td><strong>${po.totalValue.toLocaleString('vi-VN')} VNĐ</strong></td>
+                        <td ${isOverdue ? 'style="color: red; font-weight: bold;"' : ''}>${new Date(po.deliveryDate).toLocaleDateString('vi-VN')}</td>
+                        <td><span class="status-badge ${statusClass[po.status]} ${isOverdue ? 'overdue' : ''}">${statusText[po.status]}${isOverdue ? ' (Quá hạn)' : ''}</span></td>
+                        <td>
+                            <div class="btn-group">
+                                <button class="btn btn-sm btn-primary" onclick="viewPO('${po.id}')" title="Xem chi tiết">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                ${po.status === 'draft' ? `
+                                    <button class="btn btn-sm btn-info" onclick="sendPO('${po.id}')" title="Gửi PO">
+                                        <i class="fas fa-paper-plane"></i>
+                                    </button>
+                                ` : ''}
+                                ${po.status === 'confirmed' || po.status === 'shipped' ? `
+                                    <button class="btn btn-sm btn-success" onclick="showReceiveModal('${po.id}')" title="Nhận hàng">
+                                        <i class="fas fa-box-open"></i>
+                                    </button>
+                                ` : ''}
+                                ${po.status !== 'received' && po.status !== 'cancelled' ? `
+                                    <button class="btn btn-sm btn-danger" onclick="cancelPO('${po.id}')" title="Hủy PO">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                ` : ''}
+                            </div>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            }
+
+            populateFormSelectors() {
+                // Populate suppliers
+                const supplierSelect = document.getElementById('poSupplier');
+                supplierSelect.innerHTML = '<option value="">Chọn nhà cung cấp</option>';
+                this.suppliers.filter(s => s.status === 'active').forEach(supplier => {
+                    const option = document.createElement('option');
+                    option.value = supplier.id;
+                    option.textContent = `${supplier.code} - ${supplier.name}`;
+                    option.dataset.leadTime = supplier.leadTime;
+                    supplierSelect.appendChild(option);
+                });
+
+                // Populate all material selects
+                this.populateMaterialSelects();
+
+                // Set default delivery date (7 days from now)
+                const deliveryInput = document.getElementById('poDeliveryDate');
+                const defaultDelivery = new Date();
+                defaultDelivery.setDate(defaultDelivery.getDate() + 7);
+                deliveryInput.value = defaultDelivery.toISOString().split('T')[0];
+            }
+
+            populateMaterialSelects() {
+                const materialSelects = document.querySelectorAll('.material-select');
+                materialSelects.forEach(select => {
+                    select.innerHTML = '<option value="">Chọn vật liệu</option>';
+                    this.materials.forEach(material => {
+                        const option = document.createElement('option');
+                        option.value = material.id;
+                        option.textContent = `${material.code} - ${material.name}`;
+                        option.dataset.price = material.price;
+                        option.dataset.unit = material.unit;
+                        select.appendChild(option);
+                    });
+                });
+            }
+
+            addItem() {
+                const itemsContainer = document.getElementById('poItems');
+                const newItem = document.createElement('div');
+                newItem.className = 'po-item';
+                newItem.dataset.index = this.itemIndex;
+                
+                newItem.innerHTML = `
+                    <div class="item-header">
+                        <span class="item-number">Vật liệu #${this.itemIndex + 1}</span>
+                        <button type="button" class="item-remove-btn" onclick="removeItem(${this.itemIndex})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                    <div class="item-form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Vật liệu <span class="required">*</span></label>
+                            <div class="select-wrapper">
+                                <select name="items[${this.itemIndex}][materialId]" class="material-select form-select" required onchange="updateItemInfo(${this.itemIndex})">
+                                    <option value="">Chọn vật liệu</option>
+                                </select>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="material-info" style="display: none;">
+                                <span class="material-unit">Đơn vị: <strong>-</strong></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Số lượng <span class="required">*</span></label>
+                            <input type="number" name="items[${this.itemIndex}][quantity]" class="quantity-input form-input" 
+                                   required min="1" placeholder="0" onchange="calculateItemTotal(${this.itemIndex})">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Đơn giá (VNĐ) <span class="required">*</span></label>
+                            <input type="number" name="items[${this.itemIndex}][unitPrice]" class="price-input form-input" 
+                                   required min="0" placeholder="0" onchange="calculateItemTotal(${this.itemIndex})">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Thành tiền</label>
+                            <div class="total-display-wrapper">
+                                <input type="text" class="total-display form-input" readonly placeholder="0 VNĐ">
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                itemsContainer.appendChild(newItem);
+                this.populateMaterialSelects();
+                this.itemIndex++;
+            }
+
+            removeItem(index) {
+                const item = document.querySelector(`.po-item[data-index="${index}"]`);
+                if (item && document.querySelectorAll('.po-item').length > 1) {
+                    item.remove();
+                    this.calculateTotalValue();
+                    
+                    // Update item numbers
+                    document.querySelectorAll('.po-item').forEach((card, idx) => {
+                        const itemNumber = card.querySelector('.item-number');
+                        if (itemNumber) itemNumber.textContent = `Vật liệu #${idx + 1}`;
+                    });
+                }
+            }
+
+            updateItemInfo(index) {
+                const itemCard = document.querySelector(`.po-item[data-index="${index}"]`);
+                const materialSelect = itemCard.querySelector('.material-select');
+                const priceInput = itemCard.querySelector('.price-input');
+                const materialInfo = itemCard.querySelector('.material-info');
+                
+                const selectedOption = materialSelect.options[materialSelect.selectedIndex];
+                if (selectedOption && selectedOption.dataset.price) {
+                    priceInput.value = selectedOption.dataset.price;
+                    
+                    // Show material info
+                    const unit = selectedOption.dataset.unit;
+                    materialInfo.querySelector('strong').textContent = unit;
+                    materialInfo.style.display = 'block';
+                    
+                    this.calculateItemTotal(index);
+                } else {
+                    materialInfo.style.display = 'none';
+                }
+            }
+
+            calculateItemTotal(index) {
+                const itemCard = document.querySelector(`.po-item[data-index="${index}"]`);
+                const quantityInput = itemCard.querySelector('.quantity-input');
+                const priceInput = itemCard.querySelector('.price-input');
+                const totalDisplay = itemCard.querySelector('.total-display');
+                
+                const quantity = parseFloat(quantityInput.value) || 0;
+                const price = parseFloat(priceInput.value) || 0;
+                const total = quantity * price;
+                
+                totalDisplay.value = total.toLocaleString('vi-VN') + ' VNĐ';
+                this.calculateTotalValue();
+            }
+
+            calculateTotalValue() {
+                let total = 0;
+                document.querySelectorAll('.po-item').forEach(item => {
+                    const quantityInput = item.querySelector('.quantity-input');
+                    const priceInput = item.querySelector('.price-input');
+                    
+                    const quantity = parseFloat(quantityInput.value) || 0;
+                    const price = parseFloat(priceInput.value) || 0;
+                    total += quantity * price;
+                });
+                
+                document.getElementById('totalValue').textContent = total.toLocaleString('vi-VN') + ' VNĐ';
+            }
+
+            updateSupplierInfo() {
+                const supplierSelect = document.getElementById('poSupplier');
+                const deliveryInput = document.getElementById('poDeliveryDate');
+                const supplierInfo = document.getElementById('supplierInfo');
+                const supplierLeadTime = document.getElementById('supplierLeadTime');
+                
+                const selectedOption = supplierSelect.options[supplierSelect.selectedIndex];
+                if (selectedOption && selectedOption.dataset.leadTime) {
+                    const leadTime = parseInt(selectedOption.dataset.leadTime);
+                    const deliveryDate = new Date();
+                    deliveryDate.setDate(deliveryDate.getDate() + leadTime);
+                    deliveryInput.value = deliveryDate.toISOString().split('T')[0];
+                    
+                    // Show supplier info
+                    supplierLeadTime.textContent = leadTime + ' ngày';
+                    supplierInfo.style.display = 'block';
+                } else {
+                    supplierInfo.style.display = 'none';
+                }
+            }
+
+            savePO() {
+                if (!this.validateStep(2)) {
+                    return;
+                }
+
+                const form = document.getElementById('poForm');
+                const formData = new FormData(form);
+                
+                const supplierId = formData.get('supplierId');
+                const deliveryDate = formData.get('deliveryDate');
+                const priority = formData.get('priority');
+                const notes = formData.get('notes');
+
+                // Collect items
+                const items = [];
+                let totalValue = 0;
+
+                document.querySelectorAll('.po-item').forEach(itemDiv => {
+                    const materialSelect = itemDiv.querySelector('.material-select');
+                    const quantityInput = itemDiv.querySelector('.quantity-input');
+                    const priceInput = itemDiv.querySelector('.price-input');
+                    
+                    const materialId = materialSelect.value;
+                    const quantity = parseInt(quantityInput.value);
+                    const unitPrice = parseFloat(priceInput.value);
+                    
+                    if (materialId && quantity && unitPrice) {
+                        const material = this.materials.find(m => m.id === materialId);
+                        const itemTotal = quantity * unitPrice;
+                        
+                        items.push({
+                            materialId: materialId,
+                            materialName: material.name,
+                            quantity: quantity,
+                            unitPrice: unitPrice,
+                            total: itemTotal,
+                            received: 0
+                        });
+                        
+                        totalValue += itemTotal;
+                    }
+                });
+
+                const supplier = this.suppliers.find(s => s.id === supplierId);
+                
+                const po = {
+                    id: `PO-${new Date().toISOString().split('T')[0].replace(/-/g, '')}-${String(this.pos.length + 1).padStart(3, '0')}`,
+                    supplierId: supplierId,
+                    supplierName: supplier.name,
+                    deliveryDate: deliveryDate,
+                    priority: priority,
+                    status: 'draft',
+                    totalValue: totalValue,
+                    items: items,
+                    notes: notes,
+                    createdAt: new Date().toISOString(),
+                    createdBy: 'User'
+                };
+
+                this.pos.push(po);
+                this.saveData('po');
+                this.render();
+                
+                // Close modal and reset form
+                closeCreatePOModal();
+                
+                // Show success message
+                this.showNotification('success', 'PO đã được tạo thành công!', `Mã PO: ${po.id}`);
+            }
+
+            showNotification(type, title, message) {
+                // Simple notification - you can enhance this with a proper notification system
+                const notification = document.createElement('div');
+                notification.className = `notification notification-${type}`;
+                notification.innerHTML = `
+                    <div class="notification-content">
+                        <h4>${title}</h4>
+                        <p>${message}</p>
+                    </div>
+                    <button class="notification-close" onclick="this.parentElement.remove()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                `;
+                
+                document.body.appendChild(notification);
+                
+                // Auto remove after 5 seconds
+                setTimeout(() => {
+                    if (notification.parentElement) {
+                        notification.remove();
+                    }
+                }, 5000);
+            }
+
+            getInitialItemHTML() {
+                return `
+                    <div class="po-item" data-index="0">
+                        <div class="item-header">
+                            <span class="item-number">Vật liệu #1</span>
+                            <button type="button" class="item-remove-btn" onclick="removeItem(0)" disabled>
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                        <div class="item-form-grid">
+                            <div class="form-group">
+                                <label class="form-label">Vật liệu <span class="required">*</span></label>
+                                <div class="select-wrapper">
+                                    <select name="items[0][materialId]" class="material-select form-select" required onchange="updateItemInfo(0)">
+                                        <option value="">Chọn vật liệu</option>
+                                    </select>
+                                    <i class="fas fa-chevron-down"></i>
+                                </div>
+                                <div class="material-info" style="display: none;">
+                                    <span class="material-unit">Đơn vị: <strong>-</strong></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Số lượng <span class="required">*</span></label>
+                                <input type="number" name="items[0][quantity]" class="quantity-input form-input" 
+                                       required min="1" placeholder="0" onchange="calculateItemTotal(0)">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Đơn giá (VNĐ) <span class="required">*</span></label>
+                                <input type="number" name="items[0][unitPrice]" class="price-input form-input" 
+                                       required min="0" placeholder="0" onchange="calculateItemTotal(0)">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Thành tiền</label>
+                                <div class="total-display-wrapper">
+                                    <input type="text" class="total-display form-input" readonly placeholder="0 VNĐ">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            sendPO(poId) {
+                const po = this.pos.find(p => p.id === poId);
+                if (po) {
+                    po.status = 'sent';
+                    po.sentAt = new Date().toISOString();
+                    this.saveData('po');
+                    this.render();
+                    alert('PO đã được gửi đến nhà cung cấp!');
+                }
+            }
+
+            viewPO(poId) {
+                const po = this.pos.find(p => p.id === poId);
+                if (po) {
+                    const itemsDetail = po.items.map(item => 
+                        `- ${item.materialName}: ${item.quantity} x ${item.unitPrice.toLocaleString('vi-VN')} = ${item.total.toLocaleString('vi-VN')} VNĐ`
+                    ).join('\n');
+                    
+                    alert(`PO Chi tiết:\n\nMã: ${po.id}\nNhà cung cấp: ${po.supplierName}\nNgày giao: ${new Date(po.deliveryDate).toLocaleDateString('vi-VN')}\nTrạng thái: ${po.status}\n\nChi tiết:\n${itemsDetail}\n\nTổng: ${po.totalValue.toLocaleString('vi-VN')} VNĐ\n\nGhi chú: ${po.notes}`);
+                }
+            }
+
+            showReceiveModal(poId) {
+                const po = this.pos.find(p => p.id === poId);
+                if (po) {
+                    document.getElementById('receivePOId').value = poId;
+                    
+                    // Calculate remaining quantity
+                    const totalOrdered = po.items.reduce((sum, item) => sum + item.quantity, 0);
+                    const totalReceived = po.items.reduce((sum, item) => sum + (item.received || 0), 0);
+                    const remaining = totalOrdered - totalReceived;
+                    
+                    document.getElementById('remainingQuantity').textContent = remaining;
+                    document.getElementById('receiveQuantity').max = remaining;
+                    document.getElementById('receiveDate').value = new Date().toISOString().split('T')[0];
+                    
+                    new bootstrap.Modal(document.getElementById('receiveGoodsModal')).show();
+                }
+            }
+
+            confirmReceiveGoods() {
+                const poId = document.getElementById('receivePOId').value;
+                const quantity = parseInt(document.getElementById('receiveQuantity').value);
+                const receiveDate = document.getElementById('receiveDate').value;
+                const notes = document.getElementById('receiveNotes').value;
+
+                if (!quantity || !receiveDate) {
+                    alert('Vui lòng điền đầy đủ thông tin!');
+                    return;
+                }
+
+                const po = this.pos.find(p => p.id === poId);
+                if (po) {
+                    // Create receipt record
+                    const receipt = {
+                        id: `REC-${new Date().toISOString().split('T')[0].replace(/-/g, '')}-${String(this.receipts.length + 1).padStart(3, '0')}`,
+                        poId: poId,
+                        quantity: quantity,
+                        receiveDate: receiveDate,
+                        notes: notes,
+                        createdAt: new Date().toISOString(),
+                        receivedBy: 'User'
+                    };
+
+                    this.receipts.push(receipt);
+                    
+                    // Update PO item received quantities (simplified - distribute evenly)
+                    const totalOrdered = po.items.reduce((sum, item) => sum + item.quantity, 0);
+                    po.items.forEach(item => {
+                        const itemReceived = Math.round((quantity * item.quantity) / totalOrdered);
+                        item.received = (item.received || 0) + itemReceived;
+                    });
+
+                    // Check if fully received
+                    const totalReceived = po.items.reduce((sum, item) => sum + (item.received || 0), 0);
+                    if (totalReceived >= totalOrdered * 0.95) { // 95% threshold for completion
+                        po.status = 'received';
+                        po.receivedAt = new Date().toISOString();
+                    }
+
+                    this.saveData('po');
+                    this.saveData('receipts');
+                    this.render();
+                    
+                    bootstrap.Modal.getInstance(document.getElementById('receiveGoodsModal')).hide();
+                    alert('Đã ghi nhận nhận hàng thành công!');
+                }
+            }
+
+            cancelPO(poId) {
+                if (confirm('Bạn có chắc muốn hủy PO này?')) {
+                    const po = this.pos.find(p => p.id === poId);
+                    if (po) {
+                        po.status = 'cancelled';
+                        po.cancelledAt = new Date().toISOString();
+                        this.saveData('po');
+                        this.render();
+                        alert('PO đã được hủy!');
+                    }
+                }
+            }
+
+            handleURLParams() {
+                const params = new URLSearchParams(window.location.search);
+                const rfqId = params.get('rfq');
+                
+                if (rfqId) {
+                    // Auto-fill PO from RFQ
+                    const rfq = this.rfqs.find(r => r.id === rfqId);
+                    if (rfq) {
+                        setTimeout(() => {
+                            this.prefillFromRFQ(rfq);
+                            showCreatePOModal();
+                        }, 500);
+                    }
+                }
+            }
+
+            showStep(step) {
+                // Hide all steps
+                document.querySelectorAll('.form-step').forEach(s => s.classList.remove('active'));
+                document.querySelectorAll('.progress-step').forEach(s => {
+                    s.classList.remove('active', 'completed');
+                });
+
+                // Show current step
+                document.querySelector(`.form-step[data-step="${step}"]`).classList.add('active');
+                
+                // Update progress
+                for (let i = 1; i <= 3; i++) {
+                    const progressStep = document.querySelector(`.progress-step[data-step="${i}"]`);
+                    if (i < step) {
+                        progressStep.classList.add('completed');
+                    } else if (i === step) {
+                        progressStep.classList.add('active');
+                    }
+                }
+
+                // Update navigation buttons
+                const prevBtn = document.getElementById('prevStepBtn');
+                const nextBtn = document.getElementById('nextStepBtn');
+                const createBtn = document.getElementById('createPOBtn');
+
+                prevBtn.style.display = step > 1 ? 'flex' : 'none';
+                nextBtn.style.display = step < 3 ? 'flex' : 'none';
+                createBtn.style.display = step === 3 ? 'flex' : 'none';
+            }
+
+            validateStep(step) {
+                switch (step) {
+                    case 1:
+                        const supplier = document.getElementById('poSupplier').value;
+                        const deliveryDate = document.getElementById('poDeliveryDate').value;
+                        
+                        if (!supplier) {
+                            alert('Vui lòng chọn nhà cung cấp!');
+                            return false;
+                        }
+                        if (!deliveryDate) {
+                            alert('Vui lòng chọn ngày giao hàng!');
+                            return false;
+                        }
+                        return true;
+
+                    case 2:
+                        let hasValidItems = false;
+                        document.querySelectorAll('.po-item').forEach(item => {
+                            const material = item.querySelector('.material-select').value;
+                            const quantity = item.querySelector('.quantity-input').value;
+                            const price = item.querySelector('.price-input').value;
+                            
+                            if (material && quantity && price) {
+                                hasValidItems = true;
+                            }
+                        });
+                        
+                        if (!hasValidItems) {
+                            alert('Vui lòng thêm ít nhất một vật liệu hợp lệ!');
+                            return false;
+                        }
+                        return true;
+
+                    default:
+                        return true;
+                }
+            }
+
+            generateConfirmationSummary() {
+                const supplier = this.suppliers.find(s => s.id === document.getElementById('poSupplier').value);
+                const deliveryDate = document.getElementById('poDeliveryDate').value;
+                const priority = document.querySelector('input[name="priority"]:checked').value;
+                const notes = document.getElementById('poNotes').value;
+
+                let totalValue = 0;
+                const items = [];
+
+                document.querySelectorAll('.po-item-card').forEach(item => {
+                    const materialId = item.querySelector('.material-select').value;
+                    const quantity = parseInt(item.querySelector('.quantity-input').value);
+                    const unitPrice = parseFloat(item.querySelector('.price-input').value);
+                    
+                    if (materialId && quantity && unitPrice) {
+                        const material = this.materials.find(m => m.id === materialId);
+                        const itemTotal = quantity * unitPrice;
+                        totalValue += itemTotal;
+                        
+                        items.push({
+                            materialName: material.name,
+                            quantity: quantity,
+                            unitPrice: unitPrice,
+                            unit: material.unit,
+                            total: itemTotal
+                        });
+                    }
+                });
+
+                const priorityLabels = {
+                    'low': 'Thấp',
+                    'medium': 'Trung bình',
+                    'high': 'Cao',
+                    'urgent': 'Khẩn cấp'
+                };
+
+                const summaryHTML = `
+                    <div class="confirmation-grid">
+                        <div class="summary-section">
+                            <h5><i class="fas fa-building"></i> Thông tin nhà cung cấp</h5>
+                            <div class="info-grid">
+                                <div class="info-item">
+                                    <span class="label">Tên:</span>
+                                    <span class="value">${supplier.name}</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="label">Mã:</span>
+                                    <span class="value">${supplier.code}</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="label">Thời gian giao:</span>
+                                    <span class="value">${supplier.leadTime} ngày</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="summary-section">
+                            <h5><i class="fas fa-calendar"></i> Thông tin giao hàng</h5>
+                            <div class="info-grid">
+                                <div class="info-item">
+                                    <span class="label">Ngày giao:</span>
+                                    <span class="value">${new Date(deliveryDate).toLocaleDateString('vi-VN')}</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="label">Độ ưu tiên:</span>
+                                    <span class="value priority-${priority}">${priorityLabels[priority]}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="summary-section full-width">
+                            <h5><i class="fas fa-list"></i> Chi tiết vật liệu</h5>
+                            <div class="items-summary">
+                                ${items.map(item => `
+                                    <div class="item-summary">
+                                        <div class="item-name">${item.materialName}</div>
+                                        <div class="item-details">
+                                            ${item.quantity} ${item.unit} × ${item.unitPrice.toLocaleString('vi-VN')} VNĐ
+                                            = <strong>${item.total.toLocaleString('vi-VN')} VNĐ</strong>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                            <div class="total-summary-line">
+                                <span class="total-label">Tổng giá trị:</span>
+                                <span class="total-amount">${totalValue.toLocaleString('vi-VN')} VNĐ</span>
+                            </div>
+                        </div>
+
+                        ${notes ? `
+                            <div class="summary-section full-width">
+                                <h5><i class="fas fa-sticky-note"></i> Ghi chú</h5>
+                                <div class="notes-content">${notes}</div>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+
+                document.getElementById('confirmationSummary').innerHTML = summaryHTML;
+            }
+
+            closeAllModals() {
+                document.querySelectorAll('.po-modal').forEach(modal => {
+                    modal.classList.remove('show');
+                });
+            }
+
+            viewPODetail(poId) {
+                const po = this.pos.find(p => p.id === poId);
+                if (!po) return;
+
+                document.getElementById('poDetailSubtitle').textContent = `Mã PO: ${po.id}`;
+                
+                const statusClass = {
+                    'draft': 'status-new', 'sent': 'status-processing', 'confirmed': 'status-processing',
+                    'shipped': 'status-processing', 'received': 'status-completed', 'cancelled': 'status-cancelled'
+                };
+                
+                const statusText = {
+                    'draft': 'Nháp', 'sent': 'Đã gửi', 'confirmed': 'Đã xác nhận',
+                    'shipped': 'Đang giao', 'received': 'Đã nhận', 'cancelled': 'Đã hủy'
+                };
+
+                const isOverdue = new Date(po.deliveryDate) < new Date() && 
+                                 (po.status === 'confirmed' || po.status === 'shipped');
+
+                const detailHTML = `
+                    <div class="po-detail-grid">
+                        <div class="detail-section">
+                            <div class="section-header">
+                                <h4><i class="fas fa-info-circle"></i> Thông tin cơ bản</h4>
+                                <span class="status-badge ${statusClass[po.status]} ${isOverdue ? 'overdue' : ''}">
+                                    ${statusText[po.status]}${isOverdue ? ' (Quá hạn)' : ''}
+                                </span>
+                            </div>
+                            <div class="detail-grid">
+                                <div class="detail-item">
+                                    <span class="label">Mã PO:</span>
+                                    <span class="value">${po.id}</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="label">Ngày tạo:</span>
+                                    <span class="value">${new Date(po.createdAt).toLocaleDateString('vi-VN')}</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="label">Người tạo:</span>
+                                    <span class="value">${po.createdBy || 'System'}</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="label">Ngày giao dự kiến:</span>
+                                    <span class="value ${isOverdue ? 'overdue-text' : ''}">${new Date(po.deliveryDate).toLocaleDateString('vi-VN')}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="detail-section">
+                            <div class="section-header">
+                                <h4><i class="fas fa-building"></i> Nhà cung cấp</h4>
+                            </div>
+                            <div class="supplier-detail">
+                                <div class="supplier-name">${po.supplierName}</div>
+                                <div class="supplier-code">${po.supplierId}</div>
+                            </div>
+                        </div>
+
+                        <div class="detail-section full-width">
+                            <div class="section-header">
+                                <h4><i class="fas fa-list"></i> Chi tiết vật liệu</h4>
+                            </div>
+                            <div class="items-detail-table">
+                                <table class="detail-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Vật liệu</th>
+                                            <th>Số lượng</th>
+                                            <th>Đơn giá</th>
+                                            <th>Thành tiền</th>
+                                            <th>Đã nhận</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${po.items.map(item => `
+                                            <tr>
+                                                <td>
+                                                    <div class="material-info">
+                                                        <div class="material-name">${item.materialName}</div>
+                                                        <div class="material-id">${item.materialId}</div>
+                                                    </div>
+                                                </td>
+                                                <td>${item.quantity} ${this.materials.find(m => m.id === item.materialId)?.unit || ''}</td>
+                                                <td>${item.unitPrice.toLocaleString('vi-VN')} VNĐ</td>
+                                                <td class="amount">${item.total.toLocaleString('vi-VN')} VNĐ</td>
+                                                <td>
+                                                    <div class="received-info">
+                                                        <span class="received-count">${item.received || 0}</span>
+                                                        <div class="progress-bar-small">
+                                                            <div class="progress-fill" style="width: ${((item.received || 0) / item.quantity) * 100}%"></div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        `).join('')}
+                                    </tbody>
+                                    <tfoot>
+                                        <tr class="total-row">
+                                            <td colspan="3"><strong>Tổng cộng:</strong></td>
+                                            <td class="amount"><strong>${po.totalValue.toLocaleString('vi-VN')} VNĐ</strong></td>
+                                            <td></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+
+                        ${po.notes ? `
+                            <div class="detail-section full-width">
+                                <div class="section-header">
+                                    <h4><i class="fas fa-sticky-note"></i> Ghi chú</h4>
+                                </div>
+                                <div class="notes-content">${po.notes}</div>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+
+                document.getElementById('poDetailContent').innerHTML = detailHTML;
+                document.getElementById('poDetailModal').classList.add('show');
+            }
+
+            printPO() {
+                window.print();
+            }
+
+            prefillFromRFQ(rfq) {
+                // Implementation for prefilling PO form from RFQ data
+                if (rfq.selectedQuote) {
+                    const quotes = JSON.parse(localStorage.getItem('tkQuotes_data')) || [];
+                    const selectedQuote = quotes.find(q => q.id === rfq.selectedQuote);
+                    
+                    if (selectedQuote) {
+                        document.getElementById('poSupplier').value = selectedQuote.supplierId;
+                        this.updateSupplierInfo();
+                        
+                        // Fill first item
+                        const materialSelect = document.querySelector('.material-select');
+                        const quantityInput = document.querySelector('.quantity-input');
+                        const priceInput = document.querySelector('.price-input');
+                        
+                        materialSelect.value = rfq.materialId;
+                        quantityInput.value = rfq.quantity;
+                        priceInput.value = selectedQuote.unitPrice;
+                        
+                        this.calculateItemTotal(0);
+                    }
+                }
+            }
+        }
+
+        // Global functions
+        function showCreatePOModal() {
+            document.getElementById('createPOModal').style.display = 'block';
+        }
+
+        function closeCreatePOModal() {
+            document.getElementById('createPOModal').style.display = 'none';
+            document.getElementById('poForm').reset();
+            document.getElementById('poItems').innerHTML = window.poManager.getInitialItemHTML();
+            window.poManager.populateMaterialSelects();
+            window.poManager.itemIndex = 1;
+        }
+
+        function closeReceiveModal() {
+            document.getElementById('receiveGoodsModal').style.display = 'none';
+        }
+
+
+
+        // Quick filter functions
+        function quickFilter(type) {
+            // Update active button
+            document.querySelectorAll('.quick-filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.closest('.quick-filter-btn').classList.add('active');
+            
+            const statusFilter = document.getElementById('statusFilter');
+            const dateFromFilter = document.getElementById('dateFromFilter');
+            const dateToFilter = document.getElementById('dateToFilter');
+            
+            // Reset filters first
+            statusFilter.value = '';
+            dateFromFilter.value = '';
+            dateToFilter.value = '';
+            
+            const today = new Date();
+            const weekStart = new Date(today.setDate(today.getDate() - today.getDay()));
+            
+            switch(type) {
+                case 'pending':
+                    statusFilter.value = 'draft';
+                    break;
+                case 'overdue':
+                    // This would need custom logic to filter overdue items
+                    break;
+                case 'today':
+                    const todayStr = new Date().toISOString().split('T')[0];
+                    dateFromFilter.value = todayStr;
+                    dateToFilter.value = todayStr;
+                    break;
+                case 'week':
+                    const weekEndStr = new Date().toISOString().split('T')[0];
+                    const weekStartStr = weekStart.toISOString().split('T')[0];
+                    dateFromFilter.value = weekStartStr;
+                    dateToFilter.value = weekEndStr;
+                    break;
+                case 'all':
+                default:
+                    // Already reset above
+                    break;
+            }
+            
+            window.purchaseOrderManager.applyFilters();
+        }
+
+
+
+        function exportPOs() {
+            alert('Tính năng xuất Excel đang được phát triển!');
+        }
+
+        function updateSupplierInfo() {
+            window.poManager.updateSupplierInfo();
+        }
+
+        function updateItemInfo(index) {
+            window.poManager.updateItemInfo(index);
+        }
+
+        function calculateItemTotal(index) {
+            window.poManager.calculateItemTotal(index);
+        }
+
+        function addItem() {
+            window.poManager.addItem();
+        }
+
+        function removeItem(index) {
+            window.poManager.removeItem(index);
+        }
+
+        function savePO() {
+            window.poManager.savePO();
+        }
+
+        function sendPO(poId) {
+            window.poManager.sendPO(poId);
+        }
+
+        function viewPO(poId) {
+            window.poManager.viewPO(poId);
+        }
+
+        function viewPODetail(poId) {
+            window.poManager.viewPODetail(poId);
+        }
+
+        function printPO() {
+            window.poManager.printPO();
+        }
+
+        function showReceiveModal(poId) {
+            window.poManager.showReceiveModal(poId);
+        }
+
+        function confirmReceiveGoods() {
+            window.poManager.confirmReceiveGoods();
+        }
+
+        function cancelPO(poId) {
+            window.poManager.cancelPO(poId);
+        }
+
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            window.poManager = new PurchaseOrderManager();
+            window.purchaseOrderManager = window.poManager;
+            
+
+            
+            // Set default active quick filter
+            const defaultQuickFilter = document.querySelector('.quick-filter-btn[onclick="quickFilter(\'all\')"]');
+            if (defaultQuickFilter) {
+                defaultQuickFilter.classList.add('active');
+            }
+        });
+    </script>
+
+    <style>
+        /* Base colors and variables */
+        :root {
+            --primary-color: #4a90e2;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --warning-color: #ffc107;
+            --info-color: #17a2b8;
+            --light-bg: #f8f9fa;
+            --border-color: #e0e0e0;
+            --shadow: 0 2px 10px rgba(0,0,0,0.1);
+            --radius: 8px;
+        }
+
+        /* Required field styling */
+        .required {
+            color: var(--danger-color);
+            font-weight: 600;
+        }
+
+        /* Status badges */
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .status-badge.pending {
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+
+        .status-badge.approved {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .status-badge.shipping {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        .status-badge.overdue {
+            background-color: var(--danger-color);
+            color: white;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        /* Table row styling */
+        .overdue-row {
+            background: linear-gradient(90deg, #fff5f5 0%, #ffffff 100%);
+            border-left: 4px solid var(--danger-color);
+        }
+
+        .table tbody tr:hover {
+            background-color: #f8f9fa;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: all 0.2s ease;
+        }
+
+        /* Purchase order items */
+        .po-item {
+            margin-bottom: 1rem;
+            padding: 1rem;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            background: white;
+        }
+
+        .po-item:hover {
+            border-color: #ced4da;
+        }
+
+        /* Enhanced Modal Styling */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1050;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.5);
+            backdrop-filter: blur(3px);
+        }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-dialog {
+            margin: 2rem auto;
+            width: 90%;
+            max-width: 800px;
+            animation: modalSlideIn 0.3s ease-out;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            overflow: hidden;
+            border: none;
+        }
+
+        .modal-header {
+            padding: 1.5rem 2rem;
+            background: linear-gradient(135deg, var(--light-bg) 0%, #e9ecef 100%);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            margin: 0;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .modal-title i {
+            color: var(--primary-color);
+        }
+
+        .btn-close {
+            background: #f8f9fa;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            color: #6c757d;
+        }
+
+        .btn-close:hover {
+            background: var(--danger-color);
+            color: white;
+            transform: rotate(90deg);
+        }
+
+        .modal-body {
+            padding: 2rem;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+
+        .modal-footer {
+            padding: 1.5rem 2rem;
+            background: var(--light-bg);
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+
+        /* Enhanced Form Controls */
+        .form-control, .form-select {
+            border: 2px solid #e9ecef;
+            border-radius: var(--radius);
+            padding: 0.75rem 1rem;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+            outline: none;
+            background: #fafbfc;
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+            font-family: inherit;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        /* Simple Statistics Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            border: 1px solid #e9ecef;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+        }
+
+        .stat-card:nth-child(1)::before {
+            background: #007bff;
+        }
+
+        .stat-card:nth-child(2)::before {
+            background: #ffc107;
+        }
+
+        .stat-card:nth-child(3)::before {
+            background: #28a745;
+        }
+
+        .stat-card:nth-child(4)::before {
+            background: #dc3545;
+        }
+
+        .stat-card .stat-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-card:nth-child(1) .stat-icon {
+            background: rgba(0, 123, 255, 0.1);
+            color: #007bff;
+        }
+
+        .stat-card:nth-child(2) .stat-icon {
+            background: rgba(255, 193, 7, 0.1);
+            color: #ffc107;
+        }
+
+        .stat-card:nth-child(3) .stat-icon {
+            background: rgba(40, 167, 69, 0.1);
+            color: #28a745;
+        }
+
+        .stat-card:nth-child(4) .stat-icon {
+            background: rgba(220, 53, 69, 0.1);
+            color: #dc3545;
+        }
+
+        .stat-content {
+            text-align: left;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 0.25rem;
+            line-height: 1;
+        }
+
+        .stat-label {
+            color: #6c757d;
+            font-size: 0.8rem;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+
+
+
+        /* Simple responsive design */
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .quick-filters {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+
+
+        /* Simple quick filter buttons */
+        .quick-filters {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .quick-filter-btn {
+            padding: 0.4rem 0.8rem;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            background: #f8f9fa;
+            color: #495057;
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .quick-filter-btn:hover {
+            background: #e9ecef;
+        }
+
+        .quick-filter-btn.active {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            color: white;
+        }
+
+
+
+        /* Enhanced Buttons */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius);
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #357abd 100%);
+            color: white;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--success-color) 0%, #1e7e34 100%);
+            color: white;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, var(--danger-color) 0%, #c82333 100%);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #6c757d 0%, #545b62 100%);
+            color: white;
+        }
+
+        .btn-outline-primary {
+            background: transparent;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+
+        .btn-outline-primary:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* Enhanced Cards */
+        .card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, var(--light-bg) 0%, #e9ecef 100%);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1.5rem;
+            font-weight: 600;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        /* Loading animation */
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Priority indicators */
+        .priority-high {
+            color: var(--danger-color);
+            font-weight: 700;
+        }
+
+        .priority-medium {
+            color: var(--warning-color);
+            font-weight: 600;
+        }
+
+        .priority-low {
+            color: var(--success-color);
+            font-weight: 500;
+        }
+
+        /* Responsive improvements */
+        @media (max-width: 768px) {
+            .modal-dialog {
+                margin: 1rem;
+                width: calc(100% - 2rem);
+            }
+            
+            .filter-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .filter-controls select,
+            .filter-controls input {
+                min-width: 100%;
+            }
+            
+            .btn {
+                justify-content: center;
+                width: 100%;
+                margin-bottom: 0.5rem;
+            }
+        }
+
+        /* Enhanced table */
+        .table {
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .table thead th {
+            background: linear-gradient(135deg, #495057 0%, #343a40 100%);
+            color: white;
+            font-weight: 600;
+            border: none;
+            padding: 1rem;
+        }
+
+        .table tbody td {
+            padding: 1rem;
+            vertical-align: middle;
+            border-color: #f1f3f4;
+        }
+
+        /* Action buttons in table */
+        .btn-sm {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.875rem;
+            border-radius: 6px;
+        }
+
+        /* Success/Error messages */
+        .alert {
+            border-radius: var(--radius);
+            border: none;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .alert-success {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            color: #155724;
+        }
+
+        .alert-danger {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            color: #721c24;
+        }
+
+        .alert-warning {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            color: #856404;
+        }
+    </style>
+</body>
+</html>

@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý Sản phẩm - ERP Thiên Kim</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="assets/css/styles.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-industry"></i>
+                ERP Thiên Kim
+            </div>
+            <div class="user-info">
+                <span>Xin chào, Admin</span>
+                <i class="fas fa-user-circle" style="font-size: 1.5rem;"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sidebar -->
+    <nav class="sidebar">
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <a href="index.html" class="nav-link" data-page="dashboard">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="sales-orders.html" class="nav-link" data-page="sales-orders">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span>Quản lý Đơn hàng</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="products.html" class="nav-link active" data-page="products">
+                    <i class="fas fa-box"></i>
+                    <span>Quản lý Sản phẩm</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="bom.html" class="nav-link" data-page="bom">
+                    <i class="fas fa-sitemap"></i>
+                    <span>Quản lý BOM</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="inventory.html" class="nav-link" data-page="inventory">
+                    <i class="fas fa-warehouse"></i>
+                    <span>Quản lý Tồn kho</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="materials.html" class="nav-link" data-page="materials">
+                    <i class="fas fa-cubes"></i>
+                    <span>Nguyên vật liệu</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="suppliers.html" class="nav-link" data-page="suppliers">
+                    <i class="fas fa-truck"></i>
+                    <span>Nhà cung cấp</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="procurement.html" class="nav-link" data-page="procurement">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span>Quản lý Mua hàng</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="purchase-orders.html" class="nav-link" data-page="purchase-orders">
+                    <i class="fas fa-file-invoice"></i>
+                    <span>Đơn đặt hàng (PO)</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="rfq.html" class="nav-link" data-page="rfq">
+                    <i class="fas fa-question-circle"></i>
+                    <span>Yêu cầu báo giá (RFQ)</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="reports.html" class="nav-link" data-page="reports">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Báo cáo</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="settings.html" class="nav-link" data-page="settings">
+                    <i class="fas fa-cog"></i>
+                    <span>Cài đặt</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="content-header">
+            <h1 class="content-title">Quản lý Sản phẩm</h1>
+            <div class="breadcrumb">Trang chủ > Quản lý Sản phẩm</div>
+        </div>
+
+        <!-- Search and Filters -->
+        <div class="search-filters">
+            <div class="filters-row">
+                <div class="search-input">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" class="form-input" placeholder="Tìm kiếm theo mã SP, tên sản phẩm..." onkeyup="filterProducts()">
+                </div>
+                <select id="categoryFilter" class="form-select filter-select" onchange="filterProducts()">
+                    <option value="">Tất cả danh mục</option>
+                    <option value="Bút viết">Bút viết</option>
+                    <option value="Văn phòng phẩm">Văn phòng phẩm</option>
+                    <option value="Điện tử">Điện tử</option>
+                    <option value="Phụ kiện">Phụ kiện</option>
+                </select>
+                <select id="statusFilter" class="form-select filter-select" onchange="filterProducts()">
+                    <option value="">Tất cả trạng thái</option>
+                    <option value="active">Đang bán</option>
+                    <option value="inactive">Tạm ngưng</option>
+                </select>
+                <div class="action-buttons-right">
+                    <button class="btn btn-primary" onclick="showAddProductModal()">
+                        <i class="fas fa-plus"></i>
+                        Thêm sản phẩm mới
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add/Edit Product Modal -->
+        <div id="productModal" class="modal-overlay" style="display: none;">
+            <div class="modal-content" style="max-width: 600px;">
+                <div class="modal-header">
+                    <h3 id="modalTitle">Thêm sản phẩm mới</h3>
+                    <button class="modal-close" onclick="closeProductModal()">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="productForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Mã sản phẩm *</label>
+                                <input type="text" id="productCode" class="form-input" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Tên sản phẩm *</label>
+                                <input type="text" id="productName" class="form-input" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Danh mục</label>
+                                <select id="productCategory" class="form-select">
+                                    <option value="Bút viết">Bút viết</option>
+                                    <option value="Văn phòng phẩm">Văn phòng phẩm</option>
+                                    <option value="Điện tử">Điện tử</option>
+                                    <option value="Phụ kiện">Phụ kiện</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Đơn vị tính</label>
+                                <input type="text" id="productUnit" class="form-input" value="Cái">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Giá bán (VNĐ)</label>
+                                <input type="number" id="productPrice" class="form-input" min="0">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Trạng thái</label>
+                                <select id="productStatus" class="form-select">
+                                    <option value="active">Đang bán</option>
+                                    <option value="inactive">Tạm ngưng</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Hình ảnh sản phẩm</label>
+                            <div class="image-upload-container">
+                                <input type="file" id="productImageInput" accept="image/*" onchange="handleImageUpload(event)" style="display: none;">
+                                <div class="image-preview-container" onclick="document.getElementById('productImageInput').click()">
+                                    <div id="productImagePreview" class="image-preview">
+                                        <i class="fas fa-camera"></i>
+                                        <span>Click để chọn hình ảnh</span>
+                                    </div>
+                                </div>
+                                <button type="button" id="removeImageBtn" class="btn btn-sm btn-danger" onclick="removeImage()" style="display: none; margin-top: 0.5rem;">
+                                    <i class="fas fa-trash"></i> Xóa hình ảnh
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Mô tả</label>
+                            <textarea id="productDescription" class="form-input" rows="3"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeProductModal()">Hủy</button>
+                    <button type="button" class="btn btn-primary" onclick="saveProduct()">Lưu</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Products Overview -->
+        <div class="dashboard-grid" style="grid-template-columns: repeat(4, 1fr);">
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <div class="card-icon products">
+                        <i class="fas fa-box"></i>
+                    </div>
+                    <div>
+                        <div class="card-title">Tổng sản phẩm</div>
+                        <div class="card-subtitle">Đang quản lý</div>
+                    </div>
+                </div>
+                <div style="text-align: center; margin-top: 1rem;">
+                    <div class="stat-number">156</div>
+                    <div class="stat-label">sản phẩm</div>
+                </div>
+            </div>
+
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <div class="card-icon" style="background: #e8f5e8;">
+                        <i class="fas fa-check-circle" style="color: #2e7d32;"></i>
+                    </div>
+                    <div>
+                        <div class="card-title">Đang bán</div>
+                        <div class="card-subtitle">Có sẵn</div>
+                    </div>
+                </div>
+                <div style="text-align: center; margin-top: 1rem;">
+                    <div class="stat-number">142</div>
+                    <div class="stat-label">sản phẩm</div>
+                </div>
+            </div>
+
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <div class="card-icon" style="background: #fff3e0;">
+                        <i class="fas fa-pause-circle" style="color: #ef6c00;"></i>
+                    </div>
+                    <div>
+                        <div class="card-title">Tạm ngưng</div>
+                        <div class="card-subtitle">Không bán</div>
+                    </div>
+                </div>
+                <div style="text-align: center; margin-top: 1rem;">
+                    <div class="stat-number">8</div>
+                    <div class="stat-label">sản phẩm</div>
+                </div>
+            </div>
+
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <div class="card-icon" style="background: #f3e5f5;">
+                        <i class="fas fa-sitemap" style="color: #7b1fa2;"></i>
+                    </div>
+                    <div>
+                        <div class="card-title">Có BOM</div>
+                        <div class="card-subtitle">Sản xuất</div>
+                    </div>
+                </div>
+                <div style="text-align: center; margin-top: 1rem;">
+                    <div class="stat-number">89</div>
+                    <div class="stat-label">sản phẩm</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Products Table -->
+        <div class="content-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h3 style="color: #333;">Danh sách sản phẩm</h3>
+                <div class="action-buttons">
+                    <button class="btn btn-secondary">
+                        <i class="fas fa-download"></i>
+                        Xuất Excel
+                    </button>
+                    <button class="btn btn-success">
+                        <i class="fas fa-upload"></i>
+                        Nhập Excel
+                    </button>
+                </div>
+            </div>
+
+            <table class="data-table" id="productsTable">
+                <thead>
+                    <tr>
+                        <th data-sort="product-code">Mã SP</th>
+                        <th data-sort="product-name">Tên sản phẩm</th>
+                        <th data-sort="category">Danh mục</th>
+                        <th data-sort="unit">Đơn vị tính</th>
+                        <th data-sort="price">Giá bán</th>
+                        <th data-sort="status">Trạng thái</th>
+                        <th data-sort="has-bom">BOM</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody id="productsTableBody">
+                    <!-- Products will be loaded here dynamically -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- View Product Detail Modal -->
+        <div id="viewProductModal" class="modal-overlay" style="display: none;">
+            <div class="modal-content" style="max-width: 600px;">
+                <div class="modal-header">
+                    <h3>Chi tiết sản phẩm</h3>
+                    <button class="modal-close" onclick="closeViewProductModal()">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div id="productDetailContent">
+                        <!-- Content will be populated by JavaScript -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeViewProductModal()">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="assets/js/shared.js"></script>
+    <script>
+        // Products Management with localStorage
+        class ProductsManager {
+            constructor() {
+                this.storageKey = 'tkProduct_data';
+                this.currentEditId = null;
+                this.loadProducts();
+                this.initializeDefaultData();
+                this.renderProducts();
+                this.updateStatistics();
+            }
+
+            // Initialize default sample data if none exists
+            initializeDefaultData() {
+                if (!localStorage.getItem(this.storageKey)) {
+                    const defaultProducts = [
+                        {
+                            id: 'SP-001',
+                            code: 'SP-001',
+                            name: 'Bút bi bấm',
+                            category: 'Bút viết',
+                            unit: 'Cái',
+                            price: 15000,
+                            status: 'active',
+                            hasBOM: true,
+                            description: 'Bút bi bấm chất lượng cao',
+                            image: null,
+                            createdAt: new Date().toISOString()
+                        },
+                        {
+                            id: 'SP-002',
+                            code: 'SP-002',
+                            name: 'Bút chì',
+                            category: 'Bút viết',
+                            unit: 'Cái',
+                            price: 20000,
+                            status: 'active',
+                            hasBOM: true,
+                            description: 'Bút chì gỗ tự nhiên',
+                            image: null,
+                            createdAt: new Date().toISOString()
+                        },
+                        {
+                            id: 'SP-003',
+                            code: 'SP-003',
+                            name: 'Ruột bút bi',
+                            category: 'Phụ kiện',
+                            unit: 'Cái',
+                            price: 5000,
+                            status: 'active',
+                            hasBOM: false,
+                            description: 'Ruột bút bi thay thế',
+                            image: null,
+                            createdAt: new Date().toISOString()
+                        },
+                        {
+                            id: 'SP-004',
+                            code: 'SP-004',
+                            name: 'Thân bút',
+                            category: 'Phụ kiện',
+                            unit: 'Cái',
+                            price: 8000,
+                            status: 'inactive',
+                            hasBOM: false,
+                            description: 'Thân bút nhựa cao cấp',
+                            image: null,
+                            createdAt: new Date().toISOString()
+                        }
+                    ];
+                    this.saveProducts(defaultProducts);
+                }
+            }
+
+            loadProducts() {
+                const data = localStorage.getItem(this.storageKey);
+                this.products = data ? JSON.parse(data) : [];
+            }
+
+            saveProducts(products = null) {
+                const dataToSave = products || this.products;
+                localStorage.setItem(this.storageKey, JSON.stringify(dataToSave));
+                if (!products) this.loadProducts(); // Reload after save
+            }
+
+            addProduct(productData) {
+                const newProduct = {
+                    id: productData.code,
+                    ...productData,
+                    hasBOM: false,
+                    createdAt: new Date().toISOString()
+                };
+                this.products.push(newProduct);
+                this.saveProducts();
+                return newProduct;
+            }
+
+            updateProduct(id, productData) {
+                const index = this.products.findIndex(p => p.id === id);
+                if (index !== -1) {
+                    this.products[index] = { ...this.products[index], ...productData, updatedAt: new Date().toISOString() };
+                    this.saveProducts();
+                    return this.products[index];
+                }
+                return null;
+            }
+
+            deleteProduct(id) {
+                const index = this.products.findIndex(p => p.id === id);
+                if (index !== -1) {
+                    const deleted = this.products.splice(index, 1)[0];
+                    this.saveProducts();
+                    return deleted;
+                }
+                return null;
+            }
+
+            getProduct(id) {
+                return this.products.find(p => p.id === id);
+            }
+
+            renderProducts(filteredProducts = null) {
+                const tbody = document.getElementById('productsTableBody');
+                tbody.innerHTML = '';
+
+                const productsToRender = filteredProducts || this.products;
+
+                productsToRender.forEach(product => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td data-product-code="${product.code}"><strong>${product.code}</strong></td>
+                        <td data-product-name="${product.name}">
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                ${product.image ? `<img src="${product.image}" alt="${product.name}" style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px; border: 1px solid #ddd;">` : '<div style="width: 40px; height: 40px; background: #f5f5f5; border-radius: 4px; display: flex; align-items: center; justify-content: center; border: 1px solid #ddd;"><i class="fas fa-image" style="color: #ccc; font-size: 0.8rem;"></i></div>'}
+                                <span>${product.name}</span>
+                            </div>
+                        </td>
+                        <td data-category="${product.category}">${product.category}</td>
+                        <td data-unit="${product.unit}">${product.unit}</td>
+                        <td data-price="${product.price}">${product.price.toLocaleString('vi-VN')} VNĐ</td>
+                        <td data-status="${product.status}">
+                            <span class="status-badge ${product.status === 'active' ? 'status-completed' : 'status-processing'}">
+                                ${product.status === 'active' ? 'Đang bán' : 'Tạm ngưng'}
+                            </span>
+                        </td>
+                        <td data-has-bom="${product.hasBOM ? 'yes' : 'no'}">
+                            <i class="fas ${product.hasBOM ? 'fa-check text-success' : 'fa-times text-danger'}"></i>
+                        </td>
+                        <td>
+                            <div class="action-buttons">
+                                <i class="fas fa-eye action-icon" onclick="viewProduct('${product.id}')" title="Xem chi tiết"></i>
+                                <i class="fas fa-edit action-icon" onclick="editProduct('${product.id}')" title="Chỉnh sửa"></i>
+                                <i class="fas fa-trash action-icon delete-icon" onclick="deleteProduct('${product.id}')" title="Xóa"></i>
+                            </div>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            }
+
+            filterProducts(searchText = '', categoryFilter = '', statusFilter = '') {
+                const search = searchText.toLowerCase();
+                
+                let filtered = this.products.filter(product => {
+                    const matchesSearch = !search || 
+                        product.code.toLowerCase().includes(search) ||
+                        product.name.toLowerCase().includes(search) ||
+                        product.category.toLowerCase().includes(search) ||
+                        (product.description && product.description.toLowerCase().includes(search));
+                    
+                    const matchesCategory = !categoryFilter || product.category === categoryFilter;
+                    const matchesStatus = !statusFilter || product.status === statusFilter;
+                    
+                    return matchesSearch && matchesCategory && matchesStatus;
+                });
+
+                return filtered;
+            }
+
+            updateStatistics() {
+                const total = this.products.length;
+                const active = this.products.filter(p => p.status === 'active').length;
+                const inactive = this.products.filter(p => p.status === 'inactive').length;
+                const hasBOM = this.products.filter(p => p.hasBOM).length;
+
+                // Update dashboard cards
+                const cards = document.querySelectorAll('.dashboard-card .stat-number');
+                if (cards[0]) cards[0].textContent = total;
+                if (cards[1]) cards[1].textContent = active;
+                if (cards[2]) cards[2].textContent = inactive;
+                if (cards[3]) cards[3].textContent = hasBOM;
+            }
+        }
+
+        // Initialize Products Manager
+        const productsManager = new ProductsManager();
+
+        // Modal functions
+        function showAddProductModal() {
+            document.getElementById('modalTitle').textContent = 'Thêm sản phẩm mới';
+            document.getElementById('productForm').reset();
+            productsManager.currentEditId = null;
+            document.getElementById('productCode').disabled = false;
+            resetImagePreview();
+            document.getElementById('productModal').style.display = 'flex';
+        }
+
+        function closeProductModal() {
+            document.getElementById('productModal').style.display = 'none';
+            productsManager.currentEditId = null;
+            resetImagePreview();
+        }
+
+        function saveProduct() {
+            const form = document.getElementById('productForm');
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+
+            const productData = {
+                code: document.getElementById('productCode').value,
+                name: document.getElementById('productName').value,
+                category: document.getElementById('productCategory').value,
+                unit: document.getElementById('productUnit').value,
+                price: parseInt(document.getElementById('productPrice').value) || 0,
+                status: document.getElementById('productStatus').value,
+                description: document.getElementById('productDescription').value,
+                image: window.currentProductImage || null
+            };
+
+            try {
+                if (productsManager.currentEditId) {
+                    // Update existing product
+                    productsManager.updateProduct(productsManager.currentEditId, productData);
+                    window.notifications.success(`Đã cập nhật sản phẩm ${productData.code}`);
+                } else {
+                    // Check if product code already exists
+                    if (productsManager.getProduct(productData.code)) {
+                        window.notifications.error(`Mã sản phẩm ${productData.code} đã tồn tại!`);
+                        return;
+                    }
+                    // Add new product
+                    productsManager.addProduct(productData);
+                    window.notifications.success(`Đã thêm sản phẩm ${productData.code}`);
+                }
+
+                productsManager.renderProducts();
+                productsManager.updateStatistics();
+                closeProductModal();
+            } catch (error) {
+                window.notifications.error('Có lỗi xảy ra khi lưu sản phẩm');
+                console.error('Error saving product:', error);
+            }
+        }
+
+        // Products specific functionality
+        function viewProduct(productId) {
+            const product = productsManager.getProduct(productId);
+            if (product) {
+                const statusText = {
+                    'active': 'Đang bán',
+                    'inactive': 'Tạm ngưng'
+                };
+                
+                const statusClass = {
+                    'active': 'status-completed',
+                    'inactive': 'status-processing'
+                };
+
+                const createdDate = new Date(product.createdAt).toLocaleDateString('vi-VN');
+                
+                const detailContent = `
+                    <div class="product-detail">
+                        <div class="detail-row">
+                            <div class="detail-label">Hình ảnh:</div>
+                            <div class="detail-value">
+                                ${product.image ? `<img src="${product.image}" alt="${product.name}" style="width: 100px; height: 100px; object-fit: cover; border-radius: 8px; border: 1px solid #ddd;">` : '<div style="width: 100px; height: 100px; background: #f5f5f5; border-radius: 8px; display: flex; align-items: center; justify-content: center; border: 1px solid #ddd;"><i class="fas fa-image" style="color: #ccc; font-size: 1.5rem;"></i></div>'}
+                            </div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Mã sản phẩm:</div>
+                            <div class="detail-value"><strong>${product.code}</strong></div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Tên sản phẩm:</div>
+                            <div class="detail-value">${product.name}</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Danh mục:</div>
+                            <div class="detail-value">${product.category}</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Đơn vị tính:</div>
+                            <div class="detail-value">${product.unit}</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Giá bán:</div>
+                            <div class="detail-value">${product.price.toLocaleString('vi-VN')} VNĐ</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Trạng thái:</div>
+                            <div class="detail-value">
+                                <span class="status-badge ${statusClass[product.status]}">
+                                    ${statusText[product.status]}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Có BOM:</div>
+                            <div class="detail-value">
+                                <i class="fas ${product.hasBOM ? 'fa-check text-success' : 'fa-times text-danger'}"></i>
+                                ${product.hasBOM ? 'Có' : 'Chưa có'}
+                            </div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Ngày tạo:</div>
+                            <div class="detail-value">${createdDate}</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Mô tả:</div>
+                            <div class="detail-value">${product.description || 'Không có mô tả'}</div>
+                        </div>
+                    </div>
+                `;
+                
+                document.getElementById('productDetailContent').innerHTML = detailContent;
+                document.getElementById('viewProductModal').style.display = 'flex';
+            }
+        }
+
+        function closeViewProductModal() {
+            document.getElementById('viewProductModal').style.display = 'none';
+        }
+        
+        function editProduct(productId) {
+            const product = productsManager.getProduct(productId);
+            if (product) {
+                document.getElementById('modalTitle').textContent = 'Chỉnh sửa sản phẩm';
+                document.getElementById('productCode').value = product.code;
+                document.getElementById('productName').value = product.name;
+                document.getElementById('productCategory').value = product.category;
+                document.getElementById('productUnit').value = product.unit;
+                document.getElementById('productPrice').value = product.price;
+                document.getElementById('productStatus').value = product.status;
+                document.getElementById('productDescription').value = product.description || '';
+                
+                // Set image preview
+                if (product.image) {
+                    setImagePreview(product.image);
+                } else {
+                    resetImagePreview();
+                }
+                
+                // Disable code field when editing
+                document.getElementById('productCode').disabled = true;
+                
+                productsManager.currentEditId = productId;
+                document.getElementById('productModal').style.display = 'flex';
+            }
+        }
+
+        // Filter function
+        function filterProducts() {
+            const searchInput = document.getElementById('searchInput');
+            const categoryFilter = document.getElementById('categoryFilter');
+            const statusFilter = document.getElementById('statusFilter');
+            
+            const searchText = searchInput ? searchInput.value : '';
+            const categoryValue = categoryFilter ? categoryFilter.value : '';
+            const statusValue = statusFilter ? statusFilter.value : '';
+            
+            const filteredProducts = productsManager.filterProducts(searchText, categoryValue, statusValue);
+            productsManager.renderProducts(filteredProducts);
+        }
+        
+        function viewBOM(productId) {
+            window.location.href = `bom.html?product=${productId}`;
+        }
+        
+        function createBOM(productId) {
+            window.location.href = `bom.html?create=${productId}`;
+        }
+        
+        function deleteProduct(productId) {
+            const product = productsManager.getProduct(productId);
+            if (product && confirm(`Bạn có chắc chắn muốn xóa sản phẩm "${product.name}" (${productId})?`)) {
+                productsManager.deleteProduct(productId);
+                productsManager.renderProducts();
+                productsManager.updateStatistics();
+                window.notifications.success(`Đã xóa sản phẩm ${productId}`);
+            }
+        }
+
+        // Image handling functions
+        function handleImageUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                // Check file size (max 2MB)
+                if (file.size > 2 * 1024 * 1024) {
+                    window.notifications.error('Kích thước hình ảnh không được vượt quá 2MB');
+                    return;
+                }
+
+                // Check file type
+                if (!file.type.startsWith('image/')) {
+                    window.notifications.error('Vui lòng chọn file hình ảnh');
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const base64Image = e.target.result;
+                    setImagePreview(base64Image);
+                    window.currentProductImage = base64Image;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function setImagePreview(imageSrc) {
+            const preview = document.getElementById('productImagePreview');
+            const removeBtn = document.getElementById('removeImageBtn');
+            
+            preview.innerHTML = `<img src="${imageSrc}" alt="Preview" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;">`;
+            removeBtn.style.display = 'block';
+            window.currentProductImage = imageSrc;
+        }
+
+        function resetImagePreview() {
+            const preview = document.getElementById('productImagePreview');
+            const removeBtn = document.getElementById('removeImageBtn');
+            
+            preview.innerHTML = `
+                <i class="fas fa-camera"></i>
+                <span>Click để chọn hình ảnh</span>
+            `;
+            removeBtn.style.display = 'none';
+            window.currentProductImage = null;
+            
+            // Reset file input
+            const fileInput = document.getElementById('productImageInput');
+            if (fileInput) fileInput.value = '';
+        }
+
+        function removeImage() {
+            resetImagePreview();
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const productModal = document.getElementById('productModal');
+            const viewModal = document.getElementById('viewProductModal');
+            
+            if (event.target === productModal) {
+                closeProductModal();
+            }
+            if (event.target === viewModal) {
+                closeViewProductModal();
+            }
+        }
+
+        // Re-enable code field when modal closes
+        document.getElementById('productModal').addEventListener('hidden', function() {
+            document.getElementById('productCode').disabled = false;
+        });
+
+        // Custom styles
+        const customStyles = `
+            .action-buttons {
+                display: flex;
+                gap: 0.8rem;
+                justify-content: center;
+            }
+            .action-icon {
+                color: #666;
+                cursor: pointer;
+                font-size: 1rem;
+                padding: 0.3rem;
+                transition: color 0.2s ease;
+            }
+            .action-icon:hover {
+                color: #007bff;
+            }
+            .delete-icon:hover {
+                color: #dc3545;
+            }
+            .text-success { color: #28a745; }
+            .text-danger { color: #dc3545; }
+            .image-upload-container {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .image-preview-container {
+                cursor: pointer;
+                border: 2px dashed #ddd;
+                border-radius: 8px;
+                padding: 1rem;
+                width: 200px;
+                height: 150px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: border-color 0.3s ease;
+            }
+            .image-preview-container:hover {
+                border-color: #007bff;
+            }
+            .image-preview {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 0.5rem;
+                color: #666;
+                text-align: center;
+                width: 100%;
+                height: 100%;
+            }
+            .image-preview i {
+                font-size: 2rem;
+                color: #ccc;
+            }
+            .image-preview span {
+                font-size: 0.9rem;
+            }
+            .modal-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.5);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 1000;
+            }
+            .modal-content {
+                background: white;
+                border-radius: 8px;
+                width: 90%;
+                max-height: 90%;
+                overflow-y: auto;
+            }
+            .modal-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 1rem 1.5rem;
+                border-bottom: 1px solid #dee2e6;
+            }
+            .modal-header h3 {
+                margin: 0;
+                color: #333;
+            }
+            .modal-close {
+                background: none;
+                border: none;
+                font-size: 1.5rem;
+                cursor: pointer;
+                color: #666;
+            }
+            .modal-body {
+                padding: 1.5rem;
+            }
+            .modal-footer {
+                display: flex;
+                justify-content: flex-end;
+                gap: 0.5rem;
+                padding: 1rem 1.5rem;
+                border-top: 1px solid #dee2e6;
+            }
+            .product-detail {
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .detail-row {
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-start;
+                padding: 0.5rem 0;
+                border-bottom: 1px solid #f0f0f0;
+            }
+            .detail-row:last-child {
+                border-bottom: none;
+            }
+            .detail-label {
+                font-weight: 600;
+                color: #555;
+                min-width: 140px;
+                flex-shrink: 0;
+            }
+            .detail-value {
+                flex: 1;
+                text-align: right;
+                color: #333;
+            }
+            .filters-row {
+                display: flex;
+                align-items: center;
+                gap: 0.75rem;
+                flex-wrap: wrap;
+            }
+            .search-input {
+                flex: 1 1 300px;
+                min-width: 200px;
+                position: relative;
+            }
+            .search-input i {
+                position: absolute;
+                left: 12px;
+                top: 50%;
+                transform: translateY(-50%);
+                color: #666;
+                z-index: 1;
+            }
+            .search-input input {
+                padding-left: 40px;
+                width: 100%;
+            }
+            .filter-select {
+                flex: 0 0 auto;
+                min-width: 150px;
+                width: 150px;
+            }
+            .action-buttons-right {
+                flex: 0 0 auto;
+                margin-left: auto;
+            }
+            
+            /* Responsive breakpoints */
+            @media (max-width: 1024px) {
+                .filters-row {
+                    gap: 0.5rem;
+                }
+                .search-input {
+                    flex: 1 1 250px;
+                    min-width: 180px;
+                }
+                .filter-select {
+                    min-width: 130px;
+                    width: 130px;
+                }
+            }
+            
+            @media (max-width: 768px) {
+                .filters-row {
+                    flex-wrap: wrap;
+                    gap: 0.5rem;
+                }
+                .search-input {
+                    flex: 1 1 100%;
+                    min-width: unset;
+                    order: 1;
+                }
+                .filter-select {
+                    flex: 1 1 calc(50% - 0.25rem);
+                    min-width: unset;
+                    width: auto;
+                    order: 2;
+                }
+                .action-buttons-right {
+                    flex: 1 1 100%;
+                    margin-left: 0;
+                    order: 3;
+                }
+            }
+            
+            @media (max-width: 480px) {
+                .filter-select {
+                    flex: 1 1 100%;
+                }
+                .filters-row {
+                    gap: 0.75rem;
+                }
+            }
+        `;
+        
+        const styleSheet = document.createElement('style');
+        styleSheet.textContent = customStyles;
+        document.head.appendChild(styleSheet);
+    </script>
+</body>
+</html>

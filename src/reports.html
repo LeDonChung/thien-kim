@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Báo cáo - ERP Thiên Kim</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="assets/css/styles.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-industry"></i>
+                ERP Thiên Kim
+            </div>
+            <div class="user-info">
+                <span>Xin chào, Admin</span>
+                <i class="fas fa-user-circle" style="font-size: 1.5rem;"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sidebar -->
+    <nav class="sidebar">
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <a href="index.html" class="nav-link" data-page="dashboard">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="sales-orders.html" class="nav-link" data-page="sales-orders">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span>Quản lý Đơn hàng</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="products.html" class="nav-link" data-page="products">
+                    <i class="fas fa-box"></i>
+                    <span>Quản lý Sản phẩm</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="bom.html" class="nav-link" data-page="bom">
+                    <i class="fas fa-sitemap"></i>
+                    <span>Quản lý BOM</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="inventory.html" class="nav-link" data-page="inventory">
+                    <i class="fas fa-warehouse"></i>
+                    <span>Quản lý Tồn kho</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="materials.html" class="nav-link" data-page="materials">
+                    <i class="fas fa-cubes"></i>
+                    <span>Nguyên vật liệu</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="suppliers.html" class="nav-link" data-page="suppliers">
+                    <i class="fas fa-truck"></i>
+                    <span>Nhà cung cấp</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="procurement.html" class="nav-link" data-page="procurement">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span>Quản lý Mua hàng</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="purchase-orders.html" class="nav-link" data-page="purchase-orders">
+                    <i class="fas fa-file-invoice"></i>
+                    <span>Đơn đặt hàng (PO)</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="rfq.html" class="nav-link" data-page="rfq">
+                    <i class="fas fa-question-circle"></i>
+                    <span>Yêu cầu báo giá (RFQ)</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="reports.html" class="nav-link active" data-page="reports">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Báo cáo</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="settings.html" class="nav-link" data-page="settings">
+                    <i class="fas fa-cog"></i>
+                    <span>Cài đặt</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="content-header">
+            <h1 class="content-title">Hệ thống Báo cáo</h1>
+            <div class="breadcrumb">Trang chủ > Báo cáo</div>
+        </div>
+
+        <div class="content-card">
+            <div class="loading">
+                <i class="fas fa-spinner fa-spin"></i>
+                <p>Đang tải hệ thống báo cáo...</p>
+                <p style="margin-top: 1rem; color: #999;">
+                    Tính năng sẽ bao gồm: Báo cáo đơn hàng, Báo cáo tồn kho, 
+                    Báo cáo mua hàng, Phân tích hiệu suất NCC, Dashboard phân tích
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <script src="assets/js/shared.js"></script>
+</body>
+</html>

@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yêu cầu báo giá (RFQ) - ERP Thiên Kim</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="assets/css/styles.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-industry"></i>
+                ERP Thiên Kim
+            </div>
+            <div class="user-info">
+                <span>Xin chào, Admin</span>
+                <i class="fas fa-user-circle" style="font-size: 1.5rem;"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sidebar -->
+    <nav class="sidebar">
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <a href="index.html" class="nav-link" data-page="dashboard">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="sales-orders.html" class="nav-link" data-page="sales-orders">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span>Quản lý Đơn hàng</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="products.html" class="nav-link" data-page="products">
+                    <i class="fas fa-box"></i>
+                    <span>Quản lý Sản phẩm</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="bom.html" class="nav-link" data-page="bom">
+                    <i class="fas fa-sitemap"></i>
+                    <span>Quản lý BOM</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="inventory.html" class="nav-link" data-page="inventory">
+                    <i class="fas fa-warehouse"></i>
+                    <span>Quản lý Tồn kho</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="materials.html" class="nav-link" data-page="materials">
+                    <i class="fas fa-cubes"></i>
+                    <span>Nguyên vật liệu</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="suppliers.html" class="nav-link" data-page="suppliers">
+                    <i class="fas fa-truck"></i>
+                    <span>Nhà cung cấp</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="procurement.html" class="nav-link" data-page="procurement">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span>Quản lý Mua hàng</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="purchase-orders.html" class="nav-link" data-page="purchase-orders">
+                    <i class="fas fa-file-invoice"></i>
+                    <span>Đơn đặt hàng (PO)</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="rfq.html" class="nav-link active" data-page="rfq">
+                    <i class="fas fa-question-circle"></i>
+                    <span>Yêu cầu báo giá (RFQ)</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="reports.html" class="nav-link" data-page="reports">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Báo cáo</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="settings.html" class="nav-link" data-page="settings">
+                    <i class="fas fa-cog"></i>
+                    <span>Cài đặt</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="content-header">
+            <h1 class="content-title">Yêu cầu báo giá (RFQ)</h1>
+            <div class="breadcrumb">Trang chủ > Yêu cầu báo giá (RFQ)</div>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon" style="color: #007bff;">
+                    <i class="fas fa-question-circle"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-number" id="totalRFQs">0</div>
+                    <div class="stat-label">Tổng RFQ</div>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon" style="color: #ffc107;">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-number" id="waitingRFQs">0</div>
+                    <div class="stat-label">Đang chờ báo giá</div>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon" style="color: #28a745;">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-number" id="completedRFQs">0</div>
+                    <div class="stat-label">Hoàn thành</div>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon" style="color: #dc3545;">
+                    <i class="fas fa-times-circle"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-number" id="expiredRFQs">0</div>
+                    <div class="stat-label">Hết hạn</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search and Filters -->
+        <div class="search-filters">
+            <div class="search-row">
+                <div class="search-input">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchRFQ" placeholder="Tìm kiếm RFQ theo mã, vật liệu..." class="form-control" onkeyup="filterRFQs()">
+                </div>
+                <div class="form-group" style="margin: 0; min-width: 200px;">
+                    <select id="statusFilter" class="form-control" onchange="filterRFQs()">
+                        <option value="">Tất cả trạng thái</option>
+                        <option value="draft">Nháp</option>
+                        <option value="sent">Đã gửi</option>
+                        <option value="waiting">Chờ báo giá</option>
+                        <option value="completed">Hoàn thành</option>
+                        <option value="expired">Hết hạn</option>
+                        <option value="cancelled">Đã hủy</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- RFQ Management -->
+        <div class="content-card">
+            <div class="card-header">
+                <h2 class="card-title">
+                    <i class="fas fa-question-circle"></i>
+                    Danh sách RFQ
+                </h2>
+                <button class="btn btn-primary" onclick="showCreateRFQModal()">
+                    <i class="fas fa-plus"></i>
+                    Tạo RFQ mới
+                </button>
+            </div>
+            
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Mã RFQ</th>
+                            <th>Ngày tạo</th>
+                            <th>Vật liệu</th>
+                            <th>Số lượng</th>
+                            <th>Nhà cung cấp</th>
+                            <th>Hạn chót</th>
+                            <th>Báo giá</th>
+                            <th>Trạng thái</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="rfqTableBody">
+                        <tr>
+                            <td colspan="9" style="text-align: center; padding: 2rem; color: #666;">
+                                <i class="fas fa-spinner fa-spin"></i>
+                                Đang tải dữ liệu...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Create RFQ Modal -->
+        <div class="modal" id="createRFQModal" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">
+                            <i class="fas fa-plus"></i>
+                            Tạo RFQ mới
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="ModalManager.hide('createRFQModal')"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="rfqForm">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="rfqMaterial">Vật liệu <span class="required">*</span></label>
+                                    <select id="rfqMaterial" name="materialId" class="form-control" required onchange="updateMaterialInfo()">
+                                        <option value="">Chọn vật liệu</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="rfqQuantity">Số lượng <span class="required">*</span></label>
+                                    <input type="number" id="rfqQuantity" name="quantity" class="form-control" required min="1">
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="rfqUnit">Đơn vị</label>
+                                    <input type="text" id="rfqUnit" name="unit" class="form-control" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="rfqDeadline">Hạn chót báo giá <span class="required">*</span></label>
+                                    <input type="date" id="rfqDeadline" name="deadline" class="form-control" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="rfqSuppliers">Nhà cung cấp <span class="required">*</span></label>
+                                <select id="rfqSuppliers" name="suppliers" class="form-control" multiple size="4" required>
+                                </select>
+                                <small class="form-text text-muted">Chọn nhiều nhà cung cấp bằng Ctrl+Click</small>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="rfqNotes">Ghi chú</label>
+                                <textarea id="rfqNotes" name="notes" class="form-control" rows="3" 
+                                          placeholder="Yêu cầu đặc biệt, tiêu chuẩn chất lượng..."></textarea>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" onclick="ModalManager.hide('createRFQModal')">Hủy</button>
+                        <button type="button" class="btn btn-primary" onclick="saveRFQ()">
+                            <i class="fas fa-save"></i>
+                            Tạo RFQ
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quote Comparison Modal -->
+        <div class="modal" id="quoteComparisonModal" tabindex="-1">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">
+                            <i class="fas fa-balance-scale"></i>
+                            So sánh báo giá
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="ModalManager.hide('quoteComparisonModal')"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="quoteComparisonContent">
+                            <!-- Quote comparison table will be loaded here -->
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" onclick="ModalManager.hide('quoteComparisonModal')">Đóng</button>
+                        <button type="button" class="btn btn-success" onclick="selectBestQuote()">
+                            <i class="fas fa-check"></i>
+                            Chọn báo giá tốt nhất
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="assets/js/shared.js"></script>
+    <script>
+        class RFQManager {
+            constructor() {
+                this.rfqs = [];
+                this.materials = [];
+                this.suppliers = [];
+                this.quotes = [];
+                
+                this.rfqStorageKey = 'tkRFQ_data';
+                this.materialsStorageKey = 'tkMaterials_data';
+                this.suppliersStorageKey = 'tkSuppliers_data';
+                this.quotesStorageKey = 'tkQuotes_data';
+                
+                this.loadData();
+                this.initializeDefaultData();
+                this.render();
+            }
+
+            loadData() {
+                this.rfqs = JSON.parse(localStorage.getItem(this.rfqStorageKey)) || [];
+                this.materials = JSON.parse(localStorage.getItem(this.materialsStorageKey)) || [];
+                this.suppliers = JSON.parse(localStorage.getItem(this.suppliersStorageKey)) || [];
+                this.quotes = JSON.parse(localStorage.getItem(this.quotesStorageKey)) || [];
+            }
+
+            saveData(type) {
+                switch(type) {
+                    case 'rfq':
+                        localStorage.setItem(this.rfqStorageKey, JSON.stringify(this.rfqs));
+                        break;
+                    case 'quotes':
+                        localStorage.setItem(this.quotesStorageKey, JSON.stringify(this.quotes));
+                        break;
+                }
+            }
+
+            initializeDefaultData() {
+                // Initialize materials if not exist
+                if (this.materials.length === 0) {
+                    this.materials = [
+                        { id: 'NVL-001', code: 'NVL-001', name: 'Thân bút', unit: 'Cái', price: 3000 },
+                        { id: 'NVL-002', code: 'NVL-002', name: 'Ruột bút', unit: 'Cái', price: 2000 },
+                        { id: 'NVL-007', code: 'NVL-007', name: 'Đệm ngòi', unit: 'Cái', price: 300 }
+                    ];
+                    localStorage.setItem(this.materialsStorageKey, JSON.stringify(this.materials));
+                }
+
+                // Initialize suppliers if not exist
+                if (this.suppliers.length === 0) {
+                    this.suppliers = [
+                        { id: 'NCC-001', code: 'NCC-001', name: 'Công ty Nhựa ABC', status: 'active', rating: 4.5, leadTime: 7 },
+                        { id: 'NCC-002', code: 'NCC-002', name: 'Kim loại Hà Nội', status: 'active', rating: 4.2, leadTime: 10 },
+                        { id: 'NCC-003', code: 'NCC-003', name: 'Cao su Đông Nam', status: 'active', rating: 4.0, leadTime: 14 }
+                    ];
+                    localStorage.setItem(this.suppliersStorageKey, JSON.stringify(this.suppliers));
+                }
+
+                // Initialize sample RFQs
+                if (this.rfqs.length === 0) {
+                    this.rfqs = [
+                        {
+                            id: 'RFQ-20241002-001',
+                            materialId: 'NVL-001',
+                            materialName: 'Thân bút',
+                            quantity: 200,
+                            unit: 'Cái',
+                            deadline: new Date(Date.now() + 7 * 86400000).toISOString().split('T')[0],
+                            suppliers: ['NCC-001', 'NCC-002'],
+                            status: 'sent',
+                            notes: 'Cần chất lượng cao',
+                            createdAt: new Date().toISOString(),
+                            sentAt: new Date().toISOString()
+                        },
+                        {
+                            id: 'RFQ-20241002-002',
+                            materialId: 'NVL-007',
+                            materialName: 'Đệm ngòi',
+                            quantity: 500,
+                            unit: 'Cái',
+                            deadline: new Date(Date.now() + 3 * 86400000).toISOString().split('T')[0],
+                            suppliers: ['NCC-001', 'NCC-003'],
+                            status: 'waiting',
+                            notes: 'Giao hàng nhanh',
+                            createdAt: new Date(Date.now() - 86400000).toISOString(),
+                            sentAt: new Date(Date.now() - 86400000).toISOString()
+                        }
+                    ];
+                    this.saveData('rfq');
+                }
+
+                // Initialize sample quotes
+                if (this.quotes.length === 0) {
+                    this.quotes = [
+                        {
+                            id: 'QUOTE-001',
+                            rfqId: 'RFQ-20241002-001',
+                            supplierId: 'NCC-001',
+                            unitPrice: 2800,
+                            totalPrice: 560000,
+                            leadTime: 7,
+                            validUntil: new Date(Date.now() + 30 * 86400000).toISOString().split('T')[0],
+                            notes: 'Giá đã bao gồm VAT',
+                            status: 'submitted',
+                            submittedAt: new Date(Date.now() - 2 * 86400000).toISOString()
+                        },
+                        {
+                            id: 'QUOTE-002',
+                            rfqId: 'RFQ-20241002-001',
+                            supplierId: 'NCC-002',
+                            unitPrice: 3200,
+                            totalPrice: 640000,
+                            leadTime: 10,
+                            validUntil: new Date(Date.now() + 25 * 86400000).toISOString().split('T')[0],
+                            notes: 'Chất lượng cao, bảo hành 1 năm',
+                            status: 'submitted',
+                            submittedAt: new Date(Date.now() - 86400000).toISOString()
+                        }
+                    ];
+                    this.saveData('quotes');
+                }
+            }
+
+            render() {
+                this.updateStatistics();
+                this.renderRFQTable();
+                this.populateFormSelectors();
+            }
+
+            updateStatistics() {
+                const total = this.rfqs.length;
+                const waiting = this.rfqs.filter(r => r.status === 'waiting' || r.status === 'sent').length;
+                const completed = this.rfqs.filter(r => r.status === 'completed').length;
+                const expired = this.rfqs.filter(r => 
+                    r.status !== 'completed' && new Date(r.deadline) < new Date()
+                ).length;
+
+                document.getElementById('totalRFQs').textContent = total;
+                document.getElementById('waitingRFQs').textContent = waiting;
+                document.getElementById('completedRFQs').textContent = completed;
+                document.getElementById('expiredRFQs').textContent = expired;
+            }
+
+            renderRFQTable() {
+                const tbody = document.getElementById('rfqTableBody');
+                tbody.innerHTML = '';
+
+                if (this.rfqs.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="9" style="text-align: center; color: #666;">Chưa có RFQ nào</td></tr>';
+                    return;
+                }
+
+                this.rfqs.forEach(rfq => {
+                    const isExpired = new Date(rfq.deadline) < new Date();
+                    const currentStatus = isExpired && rfq.status !== 'completed' ? 'expired' : rfq.status;
+                    
+                    const statusClass = {
+                        'draft': 'status-new',
+                        'sent': 'status-processing',
+                        'waiting': 'status-processing',
+                        'completed': 'status-completed',
+                        'expired': 'status-cancelled',
+                        'cancelled': 'status-cancelled'
+                    };
+                    
+                    const statusText = {
+                        'draft': 'Nháp',
+                        'sent': 'Đã gửi',
+                        'waiting': 'Chờ báo giá',
+                        'completed': 'Hoàn thành',
+                        'expired': 'Hết hạn',
+                        'cancelled': 'Đã hủy'
+                    };
+
+                    const quotes = this.quotes.filter(q => q.rfqId === rfq.id);
+                    const supplierNames = rfq.suppliers.map(sId => {
+                        const supplier = this.suppliers.find(s => s.id === sId);
+                        return supplier ? supplier.name : sId;
+                    }).join(', ');
+
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td><strong>${rfq.id}</strong></td>
+                        <td>${new Date(rfq.createdAt).toLocaleDateString('vi-VN')}</td>
+                        <td>${rfq.materialName}</td>
+                        <td>${rfq.quantity} ${rfq.unit}</td>
+                        <td title="${supplierNames}">${rfq.suppliers.length} NCC</td>
+                        <td>${new Date(rfq.deadline).toLocaleDateString('vi-VN')}</td>
+                        <td>${quotes.length}/${rfq.suppliers.length}</td>
+                        <td><span class="status-badge ${statusClass[currentStatus]}">${statusText[currentStatus]}</span></td>
+                        <td>
+                            <div class="btn-group">
+                                <button class="btn btn-sm btn-primary" onclick="viewRFQ('${rfq.id}')" title="Xem chi tiết">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                ${quotes.length > 0 ? `
+                                    <button class="btn btn-sm btn-warning" onclick="compareQuotes('${rfq.id}')" title="So sánh báo giá">
+                                        <i class="fas fa-balance-scale"></i>
+                                    </button>
+                                ` : ''}
+                                ${currentStatus === 'completed' ? `
+                                    <button class="btn btn-sm btn-success" onclick="createPOFromRFQ('${rfq.id}')" title="Tạo PO">
+                                        <i class="fas fa-file-invoice"></i>
+                                    </button>
+                                ` : currentStatus === 'draft' ? `
+                                    <button class="btn btn-sm btn-info" onclick="sendRFQ('${rfq.id}')" title="Gửi RFQ">
+                                        <i class="fas fa-paper-plane"></i>
+                                    </button>
+                                ` : ''}
+                                <button class="btn btn-sm btn-danger" onclick="cancelRFQ('${rfq.id}')" title="Hủy RFQ">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            }
+
+            populateFormSelectors() {
+                // Populate materials
+                const materialSelect = document.getElementById('rfqMaterial');
+                materialSelect.innerHTML = '<option value="">Chọn vật liệu</option>';
+                this.materials.forEach(material => {
+                    const option = document.createElement('option');
+                    option.value = material.id;
+                    option.textContent = `${material.code} - ${material.name}`;
+                    materialSelect.appendChild(option);
+                });
+
+                // Populate suppliers
+                const supplierSelect = document.getElementById('rfqSuppliers');
+                supplierSelect.innerHTML = '';
+                this.suppliers.filter(s => s.status === 'active').forEach(supplier => {
+                    const option = document.createElement('option');
+                    option.value = supplier.id;
+                    option.textContent = `${supplier.code} - ${supplier.name}`;
+                    supplierSelect.appendChild(option);
+                });
+
+                // Set default deadline (7 days from now)
+                const deadlineInput = document.getElementById('rfqDeadline');
+                const defaultDeadline = new Date();
+                defaultDeadline.setDate(defaultDeadline.getDate() + 7);
+                deadlineInput.value = defaultDeadline.toISOString().split('T')[0];
+                deadlineInput.min = new Date().toISOString().split('T')[0]; // Prevent past dates
+            }
+
+            saveRFQ() {
+                const form = document.getElementById('rfqForm');
+                const formData = new FormData(form);
+                
+                // Validate form
+                const errors = this.validateRFQForm(formData);
+                if (errors.length > 0) {
+                    this.showAlert(errors.join('<br>'), 'danger');
+                    return;
+                }
+
+                const materialId = formData.get('materialId');
+                const quantity = parseInt(formData.get('quantity'));
+                const deadline = formData.get('deadline');
+                const suppliers = formData.getAll('suppliers');
+                const notes = formData.get('notes') || '';
+
+                const material = this.materials.find(m => m.id === materialId);
+                
+                const rfq = {
+                    id: `RFQ-${new Date().toISOString().split('T')[0].replace(/-/g, '')}-${String(this.rfqs.length + 1).padStart(3, '0')}`,
+                    materialId: materialId,
+                    materialName: material.name,
+                    quantity: quantity,
+                    unit: material.unit,
+                    deadline: deadline,
+                    suppliers: suppliers,
+                    status: 'draft',
+                    notes: notes,
+                    createdAt: new Date().toISOString(),
+                    createdBy: 'Admin'
+                };
+
+                this.rfqs.push(rfq);
+                this.saveData('rfq');
+                this.render();
+                
+                // Close modal and reset form
+                ModalManager.hide('createRFQModal');
+                form.reset();
+                this.showAlert('RFQ đã được tạo thành công!', 'success');
+            }
+
+            async sendRFQ(rfqId) {
+                const rfq = this.rfqs.find(r => r.id === rfqId);
+                if (!rfq) {
+                    this.showAlert('Không tìm thấy RFQ!', 'danger');
+                    return;
+                }
+
+                if (!confirm(`Bạn có chắc muốn gửi RFQ ${rfqId} đến các nhà cung cấp?`)) {
+                    return;
+                }
+
+                try {
+                    // Show loading state
+                    const button = event.target;
+                    const originalContent = button.innerHTML;
+                    button.innerHTML = '<span class="loading-spinner"></span> Đang gửi...';
+                    button.disabled = true;
+
+                    // Simulate sending emails
+                    const results = await this.sendRFQEmails(rfq);
+                    
+                    // Update RFQ status
+                    rfq.status = 'sent';
+                    rfq.sentAt = new Date().toISOString();
+                    this.saveData('rfq');
+                    
+                    // Generate mock quotes after a delay (simulate supplier responses)
+                    setTimeout(() => {
+                        this.generateMockQuotes(rfq);
+                        rfq.status = 'waiting';
+                        this.saveData('rfq');
+                        this.render();
+                    }, 2000);
+                    
+                    this.render();
+                    this.showAlert(`RFQ đã được gửi thành công đến ${results.length} nhà cung cấp!`, 'success');
+                    
+                    // Restore button
+                    button.innerHTML = originalContent;
+                    button.disabled = false;
+                    
+                } catch (error) {
+                    this.showAlert('Có lỗi xảy ra khi gửi RFQ!', 'danger');
+                    console.error('Send RFQ error:', error);
+                }
+            }
+
+            viewRFQ(rfqId) {
+                const rfq = this.rfqs.find(r => r.id === rfqId);
+                if (!rfq) {
+                    this.showAlert('Không tìm thấy RFQ!', 'danger');
+                    return;
+                }
+
+                const supplierNames = rfq.suppliers.map(sId => {
+                    const supplier = this.suppliers.find(s => s.id === sId);
+                    return supplier ? supplier.name : sId;
+                }).join(', ');
+                
+                const quotes = this.quotes.filter(q => q.rfqId === rfqId);
+                
+                const statusText = {
+                    'draft': 'Nháp',
+                    'sent': 'Đã gửi',
+                    'waiting': 'Chờ báo giá',
+                    'completed': 'Hoàn thành',
+                    'expired': 'Hết hạn',
+                    'cancelled': 'Đã hủy'
+                };
+
+                let quotesInfo = '';
+                if (quotes.length > 0) {
+                    quotesInfo = '\n\nBáo giá đã nhận:\n' + quotes.map(q => {
+                        const supplier = this.suppliers.find(s => s.id === q.supplierId);
+                        return `• ${supplier ? supplier.name : q.supplierId}: ${q.unitPrice.toLocaleString('vi-VN')} VNĐ/${rfq.unit} (${q.leadTime} ngày)`;
+                    }).join('\n');
+                } else {
+                    quotesInfo = '\n\nChưa có báo giá nào';
+                }
+                
+                const message = `
+                    <strong>Chi tiết RFQ</strong><br><br>
+                    <strong>Mã:</strong> ${rfq.id}<br>
+                    <strong>Vật liệu:</strong> ${rfq.materialName}<br>
+                    <strong>Số lượng:</strong> ${rfq.quantity} ${rfq.unit}<br>
+                    <strong>Hạn chót:</strong> ${new Date(rfq.deadline).toLocaleDateString('vi-VN')}<br>
+                    <strong>Nhà cung cấp:</strong> ${supplierNames}<br>
+                    <strong>Trạng thái:</strong> ${statusText[rfq.status] || rfq.status}<br>
+                    <strong>Ngày tạo:</strong> ${new Date(rfq.createdAt).toLocaleDateString('vi-VN')}<br>
+                    ${rfq.notes ? `<strong>Ghi chú:</strong> ${rfq.notes}<br>` : ''}
+                    ${quotesInfo.replace(/\n/g, '<br>')}
+                `;
+                
+                this.showAlert(message, 'info');
+            }
+
+            compareQuotes(rfqId) {
+                const rfq = this.rfqs.find(r => r.id === rfqId);
+                const quotes = this.quotes.filter(q => q.rfqId === rfqId);
+                
+                if (quotes.length === 0) {
+                    this.showAlert('Chưa có báo giá nào cho RFQ này!', 'warning');
+                    return;
+                }
+
+                // Find best quotes
+                const bestPrice = Math.min(...quotes.map(q => q.unitPrice));
+                const bestLeadTime = Math.min(...quotes.map(q => q.leadTime));
+
+                let html = `
+                    <div class="quote-comparison-header">
+                        <h6><strong>RFQ:</strong> ${rfq.id} - ${rfq.materialName}</h6>
+                        <p><strong>Số lượng:</strong> ${rfq.quantity} ${rfq.unit}</p>
+                    </div>
+                    <table class="data-table quote-comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Nhà cung cấp</th>
+                                <th>Đơn giá</th>
+                                <th>Tổng giá</th>
+                                <th>Thời gian giao</th>
+                                <th>Hạn báo giá</th>
+                                <th>Ghi chú</th>
+                                <th>Chọn</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+
+                quotes.forEach(quote => {
+                    const supplier = this.suppliers.find(s => s.id === quote.supplierId);
+                    const isBestPrice = quote.unitPrice === bestPrice;
+                    const isBestLeadTime = quote.leadTime === bestLeadTime;
+                    
+                    html += `
+                        <tr>
+                            <td>${supplier ? supplier.name : quote.supplierId}</td>
+                            <td class="${isBestPrice ? 'best-price' : ''}">${quote.unitPrice.toLocaleString('vi-VN')} VNĐ</td>
+                            <td class="${isBestPrice ? 'best-price' : ''}">${quote.totalPrice.toLocaleString('vi-VN')} VNĐ</td>
+                            <td class="${isBestLeadTime ? 'best-lead-time' : ''}">${quote.leadTime} ngày</td>
+                            <td>${new Date(quote.validUntil).toLocaleDateString('vi-VN')}</td>
+                            <td>${quote.notes || '-'}</td>
+                            <td>
+                                <input type="radio" name="selectedQuote" value="${quote.id}">
+                            </td>
+                        </tr>
+                    `;
+                });
+
+                html += `
+                        </tbody>
+                    </table>
+                    <div class="mt-3">
+                        <small class="text-muted">
+                            <span class="best-price" style="padding: 2px 6px; border-radius: 3px;">Giá tốt nhất</span>
+                            <span class="best-lead-time" style="padding: 2px 6px; border-radius: 3px; margin-left: 10px;">Thời gian giao nhanh nhất</span>
+                        </small>
+                    </div>
+                `;
+                
+                document.getElementById('quoteComparisonContent').innerHTML = html;
+                ModalManager.show('quoteComparisonModal');
+            }
+
+            cancelRFQ(rfqId) {
+                if (!confirm('Bạn có chắc muốn hủy RFQ này? Hành động này không thể hoàn tác.')) {
+                    return;
+                }
+                
+                const rfq = this.rfqs.find(r => r.id === rfqId);
+                if (!rfq) {
+                    this.showAlert('Không tìm thấy RFQ!', 'danger');
+                    return;
+                }
+                
+                rfq.status = 'cancelled';
+                rfq.cancelledAt = new Date().toISOString();
+                rfq.cancelledBy = 'Admin';
+                this.saveData('rfq');
+                this.render();
+                this.showAlert('RFQ đã được hủy thành công!', 'info');
+            }
+
+            createPOFromRFQ(rfqId) {
+                // Redirect to Purchase Orders page with RFQ context
+                window.location.href = `purchase-orders.html?rfq=${rfqId}`;
+            }
+
+            // Alert system
+            showAlert(message, type = 'info') {
+                const alertContainer = document.getElementById('alertContainer') || this.createAlertContainer();
+                
+                const alert = document.createElement('div');
+                alert.className = `alert alert-${type} fade-in`;
+                alert.innerHTML = `
+                    <span>${message}</span>
+                    <button type="button" class="btn-close" onclick="this.parentElement.remove()" style="margin-left: auto; background: none; border: none; font-size: 1.2rem; cursor: pointer;">&times;</button>
+                `;
+                alert.style.display = 'flex';
+                alert.style.alignItems = 'center';
+                alert.style.justifyContent = 'space-between';
+                
+                alertContainer.appendChild(alert);
+
+                // Auto remove after 5 seconds
+                setTimeout(() => {
+                    if (alert.parentElement) {
+                        alert.remove();
+                    }
+                }, 5000);
+            }
+
+            createAlertContainer() {
+                const container = document.createElement('div');
+                container.id = 'alertContainer';
+                container.style.position = 'fixed';
+                container.style.top = '90px';
+                container.style.right = '20px';
+                container.style.zIndex = '9999';
+                container.style.maxWidth = '400px';
+                document.body.appendChild(container);
+                return container;
+            }
+
+            // Enhanced validation
+            validateRFQForm(formData) {
+                const errors = [];
+                
+                if (!formData.get('materialId')) {
+                    errors.push('Vui lòng chọn vật liệu');
+                }
+                
+                const quantity = parseInt(formData.get('quantity'));
+                if (!quantity || quantity <= 0) {
+                    errors.push('Số lượng phải lớn hơn 0');
+                }
+                
+                const deadline = new Date(formData.get('deadline'));
+                const today = new Date();
+                if (deadline <= today) {
+                    errors.push('Hạn chót phải sau ngày hôm nay');
+                }
+                
+                const suppliers = formData.getAll('suppliers');
+                if (suppliers.length === 0) {
+                    errors.push('Vui lòng chọn ít nhất một nhà cung cấp');
+                }
+                
+                return errors;
+            }
+
+            // Send RFQ emails (simulation)
+            sendRFQEmails(rfq) {
+                // Simulate sending emails to suppliers
+                const emailPromises = rfq.suppliers.map(supplierId => {
+                    const supplier = this.suppliers.find(s => s.id === supplierId);
+                    return new Promise((resolve) => {
+                        // Simulate API call
+                        setTimeout(() => {
+                            console.log(`RFQ sent to ${supplier ? supplier.name : supplierId}`);
+                            resolve({ supplierId, success: true });
+                        }, Math.random() * 1000 + 500);
+                    });
+                });
+
+                return Promise.all(emailPromises);
+            }
+
+            // Generate mock quotes (for demo purposes)
+            generateMockQuotes(rfq) {
+                const basePrice = this.materials.find(m => m.id === rfq.materialId)?.price || 1000;
+                
+                rfq.suppliers.forEach((supplierId, index) => {
+                    const variation = (Math.random() - 0.5) * 0.4; // ±20% variation
+                    const unitPrice = Math.round(basePrice * (1 + variation));
+                    const leadTime = Math.floor(Math.random() * 15) + 5; // 5-20 days
+                    
+                    const quote = {
+                        id: `QUOTE-${Date.now()}-${index + 1}`,
+                        rfqId: rfq.id,
+                        supplierId: supplierId,
+                        unitPrice: unitPrice,
+                        totalPrice: unitPrice * rfq.quantity,
+                        leadTime: leadTime,
+                        validUntil: new Date(Date.now() + 30 * 86400000).toISOString().split('T')[0],
+                        notes: `Báo giá từ ${this.suppliers.find(s => s.id === supplierId)?.name || supplierId}`,
+                        status: 'submitted',
+                        submittedAt: new Date(Date.now() + Math.random() * 86400000).toISOString()
+                    };
+                    
+                    this.quotes.push(quote);
+                });
+                
+                this.saveData('quotes');
+            }
+        }
+
+        // Modal functionality (without Bootstrap dependency)
+        class ModalManager {
+            static show(modalId) {
+                const modal = document.getElementById(modalId);
+                if (modal) {
+                    modal.classList.add('show');
+                    modal.style.display = 'flex';
+                    document.body.style.overflow = 'hidden';
+                }
+            }
+
+            static hide(modalId) {
+                const modal = document.getElementById(modalId);
+                if (modal) {
+                    modal.classList.remove('show');
+                    modal.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                }
+            }
+
+            static init() {
+                // Handle close button clicks
+                document.addEventListener('click', function(e) {
+                    if (e.target.classList.contains('btn-close') || e.target.getAttribute('data-bs-dismiss') === 'modal') {
+                        const modal = e.target.closest('.modal');
+                        if (modal) {
+                            ModalManager.hide(modal.id);
+                        }
+                    }
+                });
+
+                // Handle backdrop clicks
+                document.addEventListener('click', function(e) {
+                    if (e.target.classList.contains('modal')) {
+                        ModalManager.hide(e.target.id);
+                    }
+                });
+
+                // Handle ESC key
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape') {
+                        const visibleModal = document.querySelector('.modal.show');
+                        if (visibleModal) {
+                            ModalManager.hide(visibleModal.id);
+                        }
+                    }
+                });
+            }
+        }
+
+        // Global functions
+        function showCreateRFQModal() {
+            ModalManager.show('createRFQModal');
+        }
+
+        function updateMaterialInfo() {
+            const materialId = document.getElementById('rfqMaterial').value;
+            const material = window.rfqManager.materials.find(m => m.id === materialId);
+            
+            if (material) {
+                document.getElementById('rfqUnit').value = material.unit;
+            }
+        }
+
+        function saveRFQ() {
+            window.rfqManager.saveRFQ();
+        }
+
+        function sendRFQ(rfqId) {
+            window.rfqManager.sendRFQ(rfqId);
+        }
+
+        function viewRFQ(rfqId) {
+            window.rfqManager.viewRFQ(rfqId);
+        }
+
+        function compareQuotes(rfqId) {
+            window.rfqManager.compareQuotes(rfqId);
+        }
+
+        function cancelRFQ(rfqId) {
+            window.rfqManager.cancelRFQ(rfqId);
+        }
+
+        function createPOFromRFQ(rfqId) {
+            window.rfqManager.createPOFromRFQ(rfqId);
+        }
+
+        function filterRFQs() {
+            const searchTerm = document.getElementById('searchRFQ').value.toLowerCase();
+            const statusFilter = document.getElementById('statusFilter').value;
+            const tableBody = document.getElementById('rfqTableBody');
+            const rows = tableBody.getElementsByTagName('tr');
+
+            for (let row of rows) {
+                if (row.cells.length <= 1) continue; // Skip empty or loading rows
+                
+                const rfqCode = row.cells[0].textContent.toLowerCase();
+                const material = row.cells[2].textContent.toLowerCase();
+                const statusBadge = row.cells[7].querySelector('.status-badge');
+                const currentStatus = statusBadge ? statusBadge.className.split(' ')[1].replace('status-', '') : '';
+                
+                // Convert status class to actual status
+                const statusMap = {
+                    'new': 'draft',
+                    'processing': statusBadge?.textContent.trim() === 'Đã gửi' ? 'sent' : 'waiting',
+                    'completed': 'completed',
+                    'cancelled': statusBadge?.textContent.trim() === 'Hết hạn' ? 'expired' : 'cancelled'
+                };
+                
+                const actualStatus = statusMap[currentStatus] || currentStatus;
+                
+                const matchesSearch = !searchTerm || rfqCode.includes(searchTerm) || material.includes(searchTerm);
+                const matchesStatus = !statusFilter || actualStatus === statusFilter;
+                
+                row.style.display = matchesSearch && matchesStatus ? '' : 'none';
+            }
+        }
+
+        function selectBestQuote() {
+            const selectedQuote = document.querySelector('input[name="selectedQuote"]:checked');
+            if (!selectedQuote) {
+                alert('Vui lòng chọn một báo giá!');
+                return;
+            }
+            
+            const quoteId = selectedQuote.value;
+            const quote = window.rfqManager.quotes.find(q => q.id === quoteId);
+            if (quote) {
+                // Mark RFQ as completed
+                const rfq = window.rfqManager.rfqs.find(r => r.id === quote.rfqId);
+                if (rfq) {
+                    rfq.status = 'completed';
+                    rfq.selectedQuote = quoteId;
+                    rfq.completedAt = new Date().toISOString();
+                    window.rfqManager.saveData('rfq');
+                    window.rfqManager.render();
+                }
+                
+                ModalManager.hide('quoteComparisonModal');
+                window.rfqManager.showAlert('Đã chọn báo giá tốt nhất! RFQ đã hoàn thành.', 'success');
+            }
+        }
+
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            ModalManager.init();
+            window.rfqManager = new RFQManager();
+        });
+    </script>
+</body>
+</html>

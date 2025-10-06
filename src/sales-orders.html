@@ -1,0 +1,1414 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý Đơn hàng - ERP Thiên Kim</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="assets/css/styles.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-industry"></i>
+                ERP Thiên Kim
+            </div>
+            <div class="user-info">
+                <span>Xin chào, Admin</span>
+                <i class="fas fa-user-circle" style="font-size: 1.5rem;"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sidebar -->
+    <nav class="sidebar">
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <a href="index.html" class="nav-link" data-page="dashboard">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="sales-orders.html" class="nav-link active" data-page="sales-orders">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span>Quản lý Đơn hàng</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="products.html" class="nav-link" data-page="products">
+                    <i class="fas fa-box"></i>
+                    <span>Quản lý Sản phẩm</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="bom.html" class="nav-link" data-page="bom">
+                    <i class="fas fa-sitemap"></i>
+                    <span>Quản lý BOM</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="inventory.html" class="nav-link" data-page="inventory">
+                    <i class="fas fa-warehouse"></i>
+                    <span>Quản lý Tồn kho</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="materials.html" class="nav-link" data-page="materials">
+                    <i class="fas fa-cubes"></i>
+                    <span>Nguyên vật liệu</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="suppliers.html" class="nav-link" data-page="suppliers">
+                    <i class="fas fa-truck"></i>
+                    <span>Nhà cung cấp</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="procurement.html" class="nav-link" data-page="procurement">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span>Quản lý Mua hàng</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="purchase-orders.html" class="nav-link" data-page="purchase-orders">
+                    <i class="fas fa-file-invoice"></i>
+                    <span>Đơn đặt hàng (PO)</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="rfq.html" class="nav-link" data-page="rfq">
+                    <i class="fas fa-question-circle"></i>
+                    <span>Yêu cầu báo giá (RFQ)</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="reports.html" class="nav-link" data-page="reports">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Báo cáo</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="settings.html" class="nav-link" data-page="settings">
+                    <i class="fas fa-cog"></i>
+                    <span>Cài đặt</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="content-header">
+            <h1 class="content-title">Quản lý Đơn hàng</h1>
+            <div class="breadcrumb">Trang chủ > Quản lý Đơn hàng</div>
+        </div>
+
+        <!-- Search and Filters -->
+        <div class="search-filters">
+            <div class="search-row">
+                <div class="search-input">
+                    <i class="fas fa-search"></i>
+                    <input type="text" class="form-input" placeholder="Tìm kiếm theo mã đơn hàng, khách hàng...">
+                </div>
+                <select class="form-select" style="width: 200px;">
+                    <option value="">Tất cả trạng thái</option>
+                    <option value="new">Mới</option>
+                    <option value="processing">Đang xử lý</option>
+                    <option value="completed">Hoàn thành</option>
+                    <option value="cancelled">Đã hủy</option>
+                </select>
+                <button class="btn btn-primary" onclick="openCreateOrderModal()">
+                    <i class="fas fa-plus"></i>
+                    Tạo đơn hàng mới
+                </button>
+            </div>
+        </div>
+
+        <!-- Orders Statistics -->
+        <div class="dashboard-grid" style="grid-template-columns: repeat(4, 1fr);">
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <div class="card-icon" style="background: #e3f2fd;">
+                        <i class="fas fa-file-alt" style="color: #1565c0;"></i>
+                    </div>
+                    <div>
+                        <div class="card-title">Tổng đơn hàng</div>
+                        <div class="card-subtitle">Tháng này</div>
+                    </div>
+                </div>
+                <div style="text-align: center; margin-top: 1rem;">
+                    <div class="stat-number">175</div>
+                    <div class="stat-label">đơn hàng</div>
+                </div>
+            </div>
+
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <div class="card-icon" style="background: #fff3e0;">
+                        <i class="fas fa-clock" style="color: #ef6c00;"></i>
+                    </div>
+                    <div>
+                        <div class="card-title">Đang xử lý</div>
+                        <div class="card-subtitle">Cần theo dõi</div>
+                    </div>
+                </div>
+                <div style="text-align: center; margin-top: 1rem;">
+                    <div class="stat-number">8</div>
+                    <div class="stat-label">đơn hàng</div>
+                </div>
+            </div>
+
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <div class="card-icon" style="background: #e8f5e8;">
+                        <i class="fas fa-check-circle" style="color: #2e7d32;"></i>
+                    </div>
+                    <div>
+                        <div class="card-title">Đã hoàn thành</div>
+                        <div class="card-subtitle">Thành công</div>
+                    </div>
+                </div>
+                <div style="text-align: center; margin-top: 1rem;">
+                    <div class="stat-number">142</div>
+                    <div class="stat-label">đơn hàng</div>
+                </div>
+            </div>
+
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <div class="card-icon" style="background: #ffebee;">
+                        <i class="fas fa-times-circle" style="color: #c62828;"></i>
+                    </div>
+                    <div>
+                        <div class="card-title">Đã hủy</div>
+                        <div class="card-subtitle">Không thành công</div>
+                    </div>
+                </div>
+                <div style="text-align: center; margin-top: 1rem;">
+                    <div class="stat-number">25</div>
+                    <div class="stat-label">đơn hàng</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Orders Table -->
+        <div class="content-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h3 style="color: #333;">Danh sách đơn hàng</h3>
+                <div class="action-buttons">
+                    <button class="btn btn-secondary">
+                        <i class="fas fa-download"></i>
+                        Xuất Excel
+                    </button>
+                </div>
+            </div>
+
+            <table class="data-table" id="ordersTable">
+                <thead>
+                    <tr>
+                        <th data-sort="order-code">Mã đơn hàng</th>
+                        <th data-sort="customer">Khách hàng</th>
+                        <th data-sort="order-date">Ngày đặt</th>
+                        <th data-sort="delivery-date">Ngày giao dự kiến</th>
+                        <th data-sort="total">Tổng tiền</th>
+                        <th data-sort="status">Trạng thái</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td data-order-code="SO-2024-001"><strong>SO-2024-001</strong></td>
+                        <td data-customer="Công ty ABC">Công ty ABC</td>
+                        <td data-order-date="2024-10-01">01/10/2024</td>
+                        <td data-delivery-date="2024-10-15">15/10/2024</td>
+                        <td data-total="25000000">25,000,000 VNĐ</td>
+                        <td data-status="new">
+                            <span class="status-badge status-new">Mới</span>
+                        </td>
+                        <td>
+                            <div class="btn-group">
+                                <button class="btn btn-sm btn-primary" onclick="viewOrder('SO-2024-001')">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="btn btn-sm btn-warning" onclick="checkAvailability('SO-2024-001')">
+                                    <i class="fas fa-clipboard-check"></i>
+                                </button>
+                                <button class="btn btn-sm btn-secondary" onclick="editOrder('SO-2024-001')">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-sm btn-danger" onclick="deleteOrder('SO-2024-001')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td data-order-code="SO-2024-002"><strong>SO-2024-002</strong></td>
+                        <td data-customer="Công ty XYZ">Công ty XYZ</td>
+                        <td data-order-date="2024-09-28">28/09/2024</td>
+                        <td data-delivery-date="2024-10-12">12/10/2024</td>
+                        <td data-total="15000000">15,000,000 VNĐ</td>
+                        <td data-status="processing">
+                            <span class="status-badge status-processing">Đang xử lý</span>
+                        </td>
+                        <td>
+                            <div class="btn-group">
+                                <button class="btn btn-sm btn-primary" onclick="viewOrder('SO-2024-002')">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="btn btn-sm btn-warning" onclick="checkAvailability('SO-2024-002')">
+                                    <i class="fas fa-clipboard-check"></i>
+                                </button>
+                                <button class="btn btn-sm btn-secondary" onclick="editOrder('SO-2024-002')">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-sm btn-danger" onclick="deleteOrder('SO-2024-002')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td data-order-code="SO-2024-003"><strong>SO-2024-003</strong></td>
+                        <td data-customer="Công ty DEF">Công ty DEF</td>
+                        <td data-order-date="2024-09-25">25/09/2024</td>
+                        <td data-delivery-date="2024-10-10">10/10/2024</td>
+                        <td data-total="8500000">8,500,000 VNĐ</td>
+                        <td data-status="completed">
+                            <span class="status-badge status-completed">Hoàn thành</span>
+                        </td>
+                        <td>
+                            <div class="btn-group">
+                                <button class="btn btn-sm btn-primary" onclick="viewOrder('SO-2024-003')">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="btn btn-sm btn-secondary" onclick="editOrder('SO-2024-003')">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-sm btn-danger" onclick="deleteOrder('SO-2024-003')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td data-order-code="SO-2024-004"><strong>SO-2024-004</strong></td>
+                        <td data-customer="Công ty GHI">Công ty GHI</td>
+                        <td data-order-date="2024-09-20">20/09/2024</td>
+                        <td data-delivery-date="2024-10-05">05/10/2024</td>
+                        <td data-total="12000000">12,000,000 VNĐ</td>
+                        <td data-status="cancelled">
+                            <span class="status-badge status-cancelled">Đã hủy</span>
+                        </td>
+                        <td>
+                            <div class="btn-group">
+                                <button class="btn btn-sm btn-primary" onclick="viewOrder('SO-2024-004')">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="btn btn-sm btn-secondary" onclick="editOrder('SO-2024-004')">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-sm btn-danger" onclick="deleteOrder('SO-2024-004')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <!-- Modal for Order Details -->
+    <div id="orderModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
+        <div class="modal-content" style="background: white; padding: 2rem; border-radius: 10px; max-width: 800px; width: 90%; max-height: 90%; overflow-y: auto;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3 style="color: #333;">Chi tiết đơn hàng</h3>
+                <button data-modal-close style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #999;">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div id="orderDetails">
+                <!-- Order details will be loaded here -->
+                <div class="loading">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <p>Đang tải thông tin đơn hàng...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Availability Check Modal -->
+    <div id="availabilityModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
+        <div class="modal-content" style="background: white; padding: 2rem; border-radius: 10px; max-width: 1000px; width: 95%; max-height: 90%; overflow-y: auto;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3 style="color: #333;">
+                    <i class="fas fa-clipboard-check" style="color: #28a745; margin-right: 0.5rem;"></i>
+                    Kiểm tra khả năng đáp ứng
+                </h3>
+                <button onclick="closeAvailabilityModal()" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #999;">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div id="availabilityResults">
+                <!-- Availability results will be loaded here -->
+                <div class="loading">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <p>Đang kiểm tra khả năng đáp ứng...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create/Edit Order Modal -->
+    <div id="createEditOrderModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
+        <div class="modal-content" style="background: white; padding: 2rem; border-radius: 10px; max-width: 900px; width: 95%; max-height: 90%; overflow-y: auto;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3 style="color: #333;" id="createEditOrderTitle">
+                    <i class="fas fa-plus-circle" style="color: #28a745; margin-right: 0.5rem;"></i>
+                    Tạo đơn hàng mới
+                </h3>
+                <button onclick="closeCreateEditOrderModal()" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #999;">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <form id="createEditOrderForm">
+                <input type="hidden" id="orderId" name="orderId">
+                
+                <!-- Order Basic Info -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Mã đơn hàng:</label>
+                        <input type="text" class="form-input" id="orderCode" name="orderCode" placeholder="Tự động tạo" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Trạng thái:</label>
+                        <select class="form-select" id="orderStatus" name="orderStatus">
+                            <option value="new">Mới</option>
+                            <option value="processing">Đang xử lý</option>
+                            <option value="completed">Hoàn thành</option>
+                            <option value="cancelled">Đã hủy</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Customer Info -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Tên khách hàng: <span style="color: red;">*</span></label>
+                        <input type="text" class="form-input" id="customerName" name="customerName" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Người liên hệ:</label>
+                        <input type="text" class="form-input" id="contactPerson" name="contactPerson">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Số điện thoại:</label>
+                        <input type="tel" class="form-input" id="contactPhone" name="contactPhone">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Email:</label>
+                        <input type="email" class="form-input" id="contactEmail" name="contactEmail">
+                    </div>
+                </div>
+
+                <!-- Order Dates -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Ngày đặt hàng: <span style="color: red;">*</span></label>
+                        <input type="date" class="form-input" id="orderDate" name="orderDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Ngày giao dự kiến: <span style="color: red;">*</span></label>
+                        <input type="date" class="form-input" id="deliveryDate" name="deliveryDate" required>
+                    </div>
+                </div>
+
+                <!-- Order Items -->
+                <div class="form-group">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                        <label class="form-label">Danh sách sản phẩm: <span style="color: red;">*</span></label>
+                        <button type="button" class="btn btn-success btn-sm" onclick="addOrderItem()">
+                            <i class="fas fa-plus"></i>
+                            Thêm sản phẩm
+                        </button>
+                    </div>
+                    
+                    <div id="orderItemsContainer">
+                        <!-- Order items will be added here -->
+                    </div>
+                </div>
+
+                <!-- Total Amount -->
+                <div class="form-group">
+                    <div style="text-align: right; padding: 1rem; background: #f8f9fa; border-radius: 5px; border: 1px solid #dee2e6;">
+                        <label class="form-label">Tổng tiền:</label>
+                        <div id="totalAmount" style="font-size: 1.2rem; font-weight: bold; color: #28a745;">0 VNĐ</div>
+                    </div>
+                </div>
+
+                <!-- Form Actions -->
+                <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 2rem;">
+                    <button type="button" class="btn btn-secondary" onclick="closeCreateEditOrderModal()">
+                        <i class="fas fa-times"></i>
+                        Hủy
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i>
+                        <span id="saveButtonText">Lưu đơn hàng</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="assets/js/shared.js"></script>
+    <script>
+        // Sales Orders specific functionality
+        function viewOrder(orderId) {
+            const modal = new Modal('#orderModal');
+            modal.open();
+            
+            // Simulate loading order details
+            setTimeout(() => {
+                document.getElementById('orderDetails').innerHTML = `
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Mã đơn hàng:</label>
+                            <div style="font-weight: 600;">${orderId}</div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Trạng thái:</label>
+                            <span class="status-badge status-new">Mới</span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Khách hàng:</label>
+                            <div>Công ty ABC</div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Người liên hệ:</label>
+                            <div>Nguyễn Văn A - 0123456789</div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Ngày đặt:</label>
+                            <div>01/10/2024</div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Ngày giao dự kiến:</label>
+                            <div>15/10/2024</div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Danh sách sản phẩm:</label>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Mã SP</th>
+                                    <th>Tên sản phẩm</th>
+                                    <th>Số lượng</th>
+                                    <th>Đơn giá</th>
+                                    <th>Thành tiền</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>SP-001</td>
+                                    <td>Bút bi bấm</td>
+                                    <td>1,000</td>
+                                    <td>15,000 VNĐ</td>
+                                    <td>15,000,000 VNĐ</td>
+                                </tr>
+                                <tr>
+                                    <td>SP-002</td>
+                                    <td>Bút chì</td>
+                                    <td>500</td>
+                                    <td>20,000 VNĐ</td>
+                                    <td>10,000,000 VNĐ</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div style="text-align: right; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #eee;">
+                        <strong style="font-size: 1.2rem; color: #333;">Tổng cộng: 25,000,000 VNĐ</strong>
+                    </div>
+                `;
+            }, 1000);
+        }
+        
+        function editOrder(orderId) {
+            const order = salesOrdersData.find(o => o.id === orderId);
+            if (!order) {
+                if (window.notifications) {
+                    window.notifications.error('Không tìm thấy đơn hàng');
+                } else {
+                    alert('Không tìm thấy đơn hàng');
+                }
+                return;
+            }
+            
+            editingOrderId = orderId;
+            
+            // Update modal title
+            document.getElementById('createEditOrderTitle').innerHTML = `
+                <i class="fas fa-edit" style="color: #ffc107; margin-right: 0.5rem;"></i>
+                Chỉnh sửa đơn hàng ${order.orderCode}
+            `;
+            document.getElementById('saveButtonText').textContent = 'Cập nhật đơn hàng';
+            
+            // Fill form with order data
+            document.getElementById('orderCode').value = order.orderCode;
+            document.getElementById('orderStatus').value = order.status;
+            document.getElementById('customerName').value = order.customerName;
+            document.getElementById('contactPerson').value = order.contactPerson || '';
+            document.getElementById('contactPhone').value = order.contactPhone || '';
+            document.getElementById('contactEmail').value = order.contactEmail || '';
+            document.getElementById('orderDate').value = order.orderDate;
+            document.getElementById('deliveryDate').value = order.deliveryDate;
+            
+            // Clear and populate items
+            const container = document.getElementById('orderItemsContainer');
+            container.innerHTML = '';
+            
+            order.items.forEach((item, index) => {
+                // Generate product options with current selection
+                let productOptions = '<option value="">-- Chọn sản phẩm --</option>';
+                let productFound = false;
+                
+                productsData.forEach(product => {
+                    const selected = product.id === item.productId ? 'selected' : '';
+                    if (selected) productFound = true;
+                    const price = product.price || product.unitPrice || 0;
+                    const unit = product.unit || 'cái';
+                    const code = product.code || product.id;
+                    productOptions += `<option value="${product.id}" data-name="${product.name}" data-price="${price}" data-unit="${unit}" ${selected}>
+                        ${code} - ${product.name} (${new Intl.NumberFormat('vi-VN').format(price)} VNĐ/${unit})
+                    </option>`;
+                });
+                
+                // Add option for product not found in current list (for backward compatibility)
+                if (!productFound && item.productId) {
+                    productOptions += `<option value="${item.productId}" data-name="${item.productName}" data-price="${item.unitPrice}" selected>
+                        ${item.productId} - ${item.productName} (${new Intl.NumberFormat('vi-VN').format(item.unitPrice)} VNĐ) [Không còn trong danh sách]
+                    </option>`;
+                }
+                
+                const itemRow = document.createElement('div');
+                itemRow.className = 'order-item-row';
+                itemRow.innerHTML = `
+                    <div class="form-group" style="flex: 3;">
+                        <label class="form-label">Chọn sản phẩm: <span style="color: red;">*</span></label>
+                        <select class="form-select" name="items[${index}][productId]" onchange="onProductSelect(this, ${index})" required>
+                            ${productOptions}
+                        </select>
+                    </div>
+                    <div class="form-group" style="flex: 3;">
+                        <label class="form-label">Tên sản phẩm:</label>
+                        <input type="text" class="form-input" name="items[${index}][productName]" value="${item.productName}" readonly style="background: #e9ecef;">
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label class="form-label">Số lượng:</label>
+                        <input type="number" class="form-input" name="items[${index}][quantity]" value="${item.quantity}" min="1" required onchange="calculateItemTotal(this)">
+                    </div>
+                    <div class="form-group" style="flex: 2;">
+                        <label class="form-label">Đơn giá (VNĐ):</label>
+                        <input type="number" class="form-input" name="items[${index}][unitPrice]" value="${item.unitPrice}" min="0" readonly style="background: #e9ecef;">
+                    </div>
+                    <div class="form-group" style="flex: 2;">
+                        <label class="form-label">Thành tiền:</label>
+                        <input type="text" class="form-input" name="items[${index}][totalPrice]" value="${new Intl.NumberFormat('vi-VN').format(item.totalPrice)}" readonly style="background: #e9ecef;">
+                    </div>
+                    <div class="form-group" style="flex: 0;">
+                        <label class="form-label">&nbsp;</label>
+                        <button type="button" class="btn btn-danger btn-sm" onclick="removeOrderItem(this)" title="Xóa sản phẩm">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+                container.appendChild(itemRow);
+            });
+            
+            calculateTotalAmount();
+            
+            // Show modal
+            document.getElementById('createEditOrderModal').style.display = 'flex';
+        }
+        
+        function deleteOrder(orderId) {
+            const order = salesOrdersData.find(o => o.id === orderId);
+            if (!order) {
+                if (window.notifications) {
+                    window.notifications.error('Không tìm thấy đơn hàng');
+                } else {
+                    alert('Không tìm thấy đơn hàng');
+                }
+                return;
+            }
+            
+            // Create confirmation dialog
+            const confirmDelete = confirm(`Bạn có chắc chắn muốn xóa đơn hàng ${order.orderCode}?\n\nKhách hàng: ${order.customerName}\nTổng tiền: ${formatCurrency(order.totalAmount)}\n\nHành động này không thể hoàn tác!`);
+            
+            if (confirmDelete) {
+                // Remove from array
+                const orderIndex = salesOrdersData.findIndex(o => o.id === orderId);
+                if (orderIndex !== -1) {
+                    salesOrdersData.splice(orderIndex, 1);
+                    saveSalesOrdersData();
+                    renderOrdersTable();
+                    if (window.notifications) {
+                        window.notifications.success(`Đã xóa đơn hàng ${order.orderCode} thành công`);
+                    } else {
+                        alert(`Đã xóa đơn hàng ${order.orderCode} thành công`);
+                    }
+                }
+            }
+        }
+
+        // Availability Check Functions
+        function checkAvailability(orderId) {
+            const modal = document.getElementById('availabilityModal');
+            modal.style.display = 'flex';
+            
+            // Mock data - trong thực tế sẽ load từ localStorage
+            const orderData = getSalesOrderData(orderId);
+            
+            setTimeout(() => {
+                const results = performAvailabilityCheck(orderData);
+                displayAvailabilityResults(results);
+            }, 1500);
+        }
+
+        function getSalesOrderData(orderId) {
+            // Load real data from localStorage
+            const order = salesOrdersData.find(o => o.id === orderId);
+            
+            if (order) {
+                return {
+                    id: order.id,
+                    customerName: order.customerName,
+                    items: order.items.map(item => ({
+                        productId: item.productId,
+                        productName: item.productName,
+                        quantity: item.quantity
+                    }))
+                };
+            }
+            
+            // Fallback for missing order
+            return {
+                id: orderId,
+                customerName: 'Khách hàng không xác định',
+                items: []
+            };
+        }
+
+        function performAvailabilityCheck(orderData) {
+            // Load BOM và Materials data
+            const bomData = JSON.parse(localStorage.getItem('tkBOM_data')) || [];
+            const materialsData = JSON.parse(localStorage.getItem('tkMaterials_data')) || [];
+            
+            const results = [];
+            
+            orderData.items.forEach(item => {
+                // Tìm BOM cho sản phẩm
+                const bom = bomData.find(b => b.productId === item.productId);
+                
+                if (!bom) {
+                    results.push({
+                        product: item.productId,
+                        productName: item.productName,
+                        quantity: item.quantity,
+                        status: 'no-bom',
+                        message: 'Sản phẩm chưa có BOM',
+                        materials: []
+                    });
+                    return;
+                }
+                
+                // Tính nhu cầu NVL
+                const materialRequirements = bom.materials.map(bomMaterial => {
+                    const material = materialsData.find(m => m.id === bomMaterial.materialId);
+                    const required = bomMaterial.quantity * item.quantity;
+                    
+                    if (!material) {
+                        return {
+                            materialId: bomMaterial.materialId,
+                            materialName: bomMaterial.materialName,
+                            unit: bomMaterial.unit,
+                            required: required,
+                            available: 0,
+                            shortage: required,
+                            status: 'Không tìm thấy NVL'
+                        };
+                    }
+                    
+                    const available = (material.available !== undefined) ? material.available : 
+                                    (material.onHand || material.stock || 0) - (material.reserved || 0);
+                    const shortage = Math.max(0, required - available);
+                    
+                    return {
+                        materialId: material.id,
+                        materialCode: material.code,
+                        materialName: material.name,
+                        unit: material.unit,
+                        required: required,
+                        onHand: material.onHand || material.stock || 0,
+                        reserved: material.reserved || 0,
+                        available: available,
+                        shortage: shortage,
+                        status: shortage > 0 ? 'Thiếu' : 'Đủ'
+                    };
+                });
+                
+                const canFulfill = materialRequirements.every(req => req.status === 'Đủ');
+                
+                results.push({
+                    product: item.productId,
+                    productName: item.productName,
+                    quantity: item.quantity,
+                    status: canFulfill ? 'ok' : 'shortage',
+                    canFulfill: canFulfill,
+                    materials: materialRequirements
+                });
+            });
+            
+            return {
+                orderId: orderData.id,
+                customerName: orderData.customerName,
+                overallStatus: results.every(r => r.canFulfill) ? 'ok' : 'shortage',
+                products: results
+            };
+        }
+
+        function displayAvailabilityResults(results) {
+            const container = document.getElementById('availabilityResults');
+            
+            const overallStatusBadge = results.overallStatus === 'ok' 
+                ? '<span class="status-badge status-completed">Có thể đáp ứng</span>'
+                : '<span class="status-badge status-pending">Không đủ NVL</span>';
+            
+            let html = `
+                <div style="border: 1px solid #dee2e6; border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem; background: #f8f9fa;">
+                    <h4 style="margin: 0 0 1rem 0; color: #333;">
+                        Đơn hàng: ${results.orderId} - ${results.customerName}
+                    </h4>
+                    <div style="margin-bottom: 1rem;">
+                        <strong>Tình trạng tổng thể: </strong> ${overallStatusBadge}
+                    </div>
+                </div>
+            `;
+            
+            results.products.forEach(product => {
+                const productStatusBadge = product.canFulfill 
+                    ? '<span class="status-badge status-completed">Đủ NVL</span>'
+                    : '<span class="status-badge status-pending">Thiếu NVL</span>';
+                
+                html += `
+                    <div style="border: 1px solid #dee2e6; border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                            <h5 style="margin: 0; color: #333;">
+                                ${product.productName} (${product.quantity} cái)
+                            </h5>
+                            ${productStatusBadge}
+                        </div>
+                        
+                        <table class="data-table" style="font-size: 0.9rem;">
+                            <thead>
+                                <tr>
+                                    <th>Mã NVL</th>
+                                    <th>Tên NVL</th>
+                                    <th>Cần</th>
+                                    <th>On-Hand</th>
+                                    <th>Reserved</th>
+                                    <th>Available</th>
+                                    <th>Thiếu</th>
+                                    <th>Trạng thái</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                `;
+                
+                product.materials.forEach(mat => {
+                    const statusBadge = mat.status === 'Đủ' 
+                        ? '<span class="status-badge status-completed">Đủ</span>'
+                        : '<span class="status-badge status-pending">Thiếu</span>';
+                    
+                    html += `
+                        <tr>
+                            <td><strong>${mat.materialCode || mat.materialId}</strong></td>
+                            <td>${mat.materialName}</td>
+                            <td>${mat.required} ${mat.unit}</td>
+                            <td>${mat.onHand || 0}</td>
+                            <td>${mat.reserved || 0}</td>
+                            <td style="color: ${mat.status === 'Thiếu' ? '#dc3545' : 'inherit'}; font-weight: ${mat.status === 'Thiếu' ? 'bold' : 'normal'};">
+                                ${mat.available}
+                            </td>
+                            <td style="color: ${mat.shortage > 0 ? '#dc3545' : '#28a745'}; font-weight: ${mat.shortage > 0 ? 'bold' : 'normal'};">
+                                ${mat.shortage || 0} ${mat.unit}
+                            </td>
+                            <td>${statusBadge}</td>
+                        </tr>
+                    `;
+                });
+                
+                html += `
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+            });
+            
+            // Thêm action buttons
+            const shortageItems = results.products.flatMap(p => 
+                p.materials.filter(m => m.shortage > 0)
+            );
+            
+            if (shortageItems.length > 0) {
+                html += `
+                    <div style="text-align: center; margin-top: 2rem; padding: 1.5rem; background: #fff3cd; border-radius: 8px; border: 1px solid #ffeaa7;">
+                        <h5 style="color: #856404; margin-bottom: 1rem;">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            Có ${shortageItems.length} NVL thiếu hàng
+                        </h5>
+                        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                            <button class="btn btn-warning" onclick="autoCreatePRForShortage('${results.orderId}')">
+                                <i class="fas fa-file-alt"></i>
+                                Tự động tạo PR
+                            </button>
+                            <button class="btn btn-primary" onclick="reserveAvailableStock('${results.orderId}')">
+                                <i class="fas fa-lock"></i>
+                                Đặt trước NVL có sẵn
+                            </button>
+                        </div>
+                    </div>
+                `;
+            } else {
+                html += `
+                    <div style="text-align: center; margin-top: 2rem; padding: 1.5rem; background: #d4edda; border-radius: 8px; border: 1px solid #c3e6cb;">
+                        <h5 style="color: #155724; margin-bottom: 1rem;">
+                            <i class="fas fa-check-circle"></i>
+                            Đủ NVL để sản xuất
+                        </h5>
+                        <button class="btn btn-success" onclick="confirmOrder('${results.orderId}')">
+                            <i class="fas fa-check"></i>
+                            Xác nhận đơn hàng
+                        </button>
+                    </div>
+                `;
+            }
+            
+            container.innerHTML = html;
+        }
+
+        function closeAvailabilityModal() {
+            document.getElementById('availabilityModal').style.display = 'none';
+        }
+
+        function autoCreatePRForShortage(orderId) {
+            window.notifications.info(`Đang tạo PR tự động cho đơn hàng ${orderId}...`);
+            
+            // Redirect to procurement with order info
+            setTimeout(() => {
+                window.location.href = `procurement.html?order=${orderId}&action=auto-pr`;
+            }, 1000);
+        }
+
+        function reserveAvailableStock(orderId) {
+            if (confirm('Đặt trước NVL có sẵn cho đơn hàng này?')) {
+                window.notifications.success(`Đã đặt trước NVL cho đơn hàng ${orderId}`);
+                // Logic đặt trước stock
+                closeAvailabilityModal();
+            }
+        }
+
+        function confirmOrder(orderId) {
+            if (confirm('Xác nhận và đặt trước toàn bộ NVL cho đơn hàng này?')) {
+                window.notifications.success(`Đã xác nhận đơn hàng ${orderId}`);
+                // Logic confirm order và reserve stock
+                closeAvailabilityModal();
+            }
+        }
+
+        // Order items management
+        function addOrderItem() {
+            const container = document.getElementById('orderItemsContainer');
+            const itemIndex = container.children.length;
+            
+            // Check if products data is available
+            if (productsData.length === 0) {
+                if (window.notifications) {
+                    window.notifications.warning('Chưa có dữ liệu sản phẩm. Vui lòng thêm sản phẩm trước khi tạo đơn hàng.');
+                } else {
+                    alert('Chưa có dữ liệu sản phẩm. Vui lòng thêm sản phẩm trước khi tạo đơn hàng.');
+                }
+                return;
+            }
+            
+            // Generate product options
+            let productOptions = '<option value="">-- Chọn sản phẩm --</option>';
+            productsData.forEach(product => {
+                const price = product.price || product.unitPrice || 0;
+                const unit = product.unit || 'cái';
+                const code = product.code || product.id;
+                productOptions += `<option value="${product.id}" data-name="${product.name}" data-price="${price}" data-unit="${unit}">
+                    ${code} - ${product.name} (${new Intl.NumberFormat('vi-VN').format(price)} VNĐ/${unit})
+                </option>`;
+            });
+            
+            const itemRow = document.createElement('div');
+            itemRow.className = 'order-item-row';
+            itemRow.innerHTML = `
+                <div class="form-group" style="flex: 3;">
+                    <label class="form-label">Chọn sản phẩm: <span style="color: red;">*</span></label>
+                    <select class="form-select" name="items[${itemIndex}][productId]" onchange="onProductSelect(this, ${itemIndex})" required>
+                        ${productOptions}
+                    </select>
+                </div>
+                <div class="form-group" style="flex: 3;">
+                    <label class="form-label">Tên sản phẩm:</label>
+                    <input type="text" class="form-input" name="items[${itemIndex}][productName]" placeholder="Tên sản phẩm" readonly style="background: #e9ecef;">
+                </div>
+                <div class="form-group" style="flex: 1;">
+                    <label class="form-label">Số lượng:</label>
+                    <input type="number" class="form-input" name="items[${itemIndex}][quantity]" placeholder="1" min="1" required onchange="calculateItemTotal(this)">
+                </div>
+                <div class="form-group" style="flex: 2;">
+                    <label class="form-label">Đơn giá (VNĐ):</label>
+                    <input type="number" class="form-input" name="items[${itemIndex}][unitPrice]" placeholder="0" min="0" readonly style="background: #e9ecef;">
+                </div>
+                <div class="form-group" style="flex: 2;">
+                    <label class="form-label">Thành tiền:</label>
+                    <input type="text" class="form-input" name="items[${itemIndex}][totalPrice]" placeholder="0" readonly style="background: #e9ecef;">
+                </div>
+                <div class="form-group" style="flex: 0;">
+                    <label class="form-label">&nbsp;</label>
+                    <button type="button" class="btn btn-danger btn-sm" onclick="removeOrderItem(this)" title="Xóa sản phẩm">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            `;
+            
+            container.appendChild(itemRow);
+        }
+
+        // Handle product selection
+        function onProductSelect(selectElement, itemIndex) {
+            const selectedOption = selectElement.options[selectElement.selectedIndex];
+            const itemRow = selectElement.closest('.order-item-row');
+            
+            if (selectedOption.value) {
+                const productName = selectedOption.getAttribute('data-name') || '';
+                const productPrice = selectedOption.getAttribute('data-price') || '0';
+                
+                // Fill product information
+                itemRow.querySelector(`input[name="items[${itemIndex}][productName]"]`).value = productName;
+                itemRow.querySelector(`input[name="items[${itemIndex}][unitPrice]"]`).value = productPrice;
+                
+                // Calculate total if quantity is already entered
+                const quantityInput = itemRow.querySelector(`input[name="items[${itemIndex}][quantity]"]`);
+                if (quantityInput.value) {
+                    calculateItemTotal(quantityInput);
+                }
+            } else {
+                // Clear fields if no product selected
+                itemRow.querySelector(`input[name="items[${itemIndex}][productName]"]`).value = '';
+                itemRow.querySelector(`input[name="items[${itemIndex}][unitPrice]"]`).value = '';
+                itemRow.querySelector(`input[name="items[${itemIndex}][totalPrice]"]`).value = '';
+                calculateTotalAmount();
+            }
+        }
+
+        function removeOrderItem(button) {
+            const itemRow = button.closest('.order-item-row');
+            itemRow.remove();
+            calculateTotalAmount();
+        }
+
+        function calculateItemTotal(input) {
+            const itemRow = input.closest('.order-item-row');
+            const quantityInput = itemRow.querySelector('input[name*="[quantity]"]');
+            const unitPriceInput = itemRow.querySelector('input[name*="[unitPrice]"]');
+            const totalPriceInput = itemRow.querySelector('input[name*="[totalPrice]"]');
+            
+            const quantity = parseFloat(quantityInput.value) || 0;
+            const unitPrice = parseFloat(unitPriceInput.value) || 0;
+            const totalPrice = quantity * unitPrice;
+            
+            totalPriceInput.value = formatCurrency(totalPrice).replace(' VNĐ', '');
+            
+            calculateTotalAmount();
+        }
+
+        function calculateTotalAmount() {
+            const totalPriceInputs = document.querySelectorAll('input[name*="[totalPrice]"]');
+            let totalAmount = 0;
+            
+            totalPriceInputs.forEach(input => {
+                const value = input.value.replace(/[,\s]/g, '');
+                totalAmount += parseFloat(value) || 0;
+            });
+            
+            document.getElementById('totalAmount').textContent = formatCurrency(totalAmount);
+        }
+
+        // Form submission
+        document.getElementById('createEditOrderForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const orderData = {
+                orderCode: formData.get('orderCode'),
+                customerName: formData.get('customerName'),
+                contactPerson: formData.get('contactPerson'),
+                contactPhone: formData.get('contactPhone'),
+                contactEmail: formData.get('contactEmail'),
+                orderDate: formData.get('orderDate'),
+                deliveryDate: formData.get('deliveryDate'),
+                status: formData.get('orderStatus') || 'new',
+                items: [],
+                totalAmount: 0
+            };
+            
+            // Collect items
+            const itemRows = document.querySelectorAll('.order-item-row');
+            itemRows.forEach((row, index) => {
+                const productIdElement = row.querySelector(`select[name="items[${index}][productId]"]`);
+                const productId = productIdElement ? productIdElement.value : '';
+                const productName = row.querySelector(`input[name="items[${index}][productName]"]`).value;
+                const quantity = parseFloat(row.querySelector(`input[name="items[${index}][quantity]"]`).value) || 0;
+                const unitPrice = parseFloat(row.querySelector(`input[name="items[${index}][unitPrice]"]`).value) || 0;
+                const totalPrice = quantity * unitPrice;
+                
+                if (productId && productName && quantity > 0) {
+                    orderData.items.push({
+                        productId,
+                        productName,
+                        quantity,
+                        unitPrice,
+                        totalPrice
+                    });
+                }
+            });
+            
+            // Calculate total amount
+            orderData.totalAmount = orderData.items.reduce((sum, item) => sum + item.totalPrice, 0);
+            
+            // Debug logging
+            console.log('Order data to save:', orderData);
+            console.log('Form data collected:', {
+                customerName: orderData.customerName,
+                orderDate: orderData.orderDate,
+                deliveryDate: orderData.deliveryDate,
+                itemsCount: orderData.items.length,
+                items: orderData.items
+            });
+            
+            // Validate
+            if (!orderData.customerName || !orderData.orderDate || !orderData.deliveryDate || orderData.items.length === 0) {
+                console.error('Validation failed:', {
+                    customerName: !!orderData.customerName,
+                    orderDate: !!orderData.orderDate,
+                    deliveryDate: !!orderData.deliveryDate,
+                    itemsCount: orderData.items.length
+                });
+                
+                // Show detailed error message
+                let errorMessages = [];
+                if (!orderData.customerName) errorMessages.push('Tên khách hàng');
+                if (!orderData.orderDate) errorMessages.push('Ngày đặt hàng');
+                if (!orderData.deliveryDate) errorMessages.push('Ngày giao dự kiến');
+                if (orderData.items.length === 0) errorMessages.push('Ít nhất một sản phẩm');
+                
+                const errorText = `Vui lòng điền đầy đủ: ${errorMessages.join(', ')}`;
+                
+                if (window.notifications) {
+                    window.notifications.error(errorText);
+                } else {
+                    alert(errorText);
+                }
+                return;
+            }
+            
+            if (editingOrderId) {
+                // Update existing order
+                const orderIndex = salesOrdersData.findIndex(o => o.id === editingOrderId);
+                if (orderIndex !== -1) {
+                    orderData.id = editingOrderId;
+                    orderData.updatedAt = new Date().toISOString();
+                    orderData.createdAt = salesOrdersData[orderIndex].createdAt;
+                    salesOrdersData[orderIndex] = orderData;
+                    if (window.notifications) {
+                        window.notifications.success('Đã cập nhật đơn hàng thành công');
+                    } else {
+                        alert('Đã cập nhật đơn hàng thành công');
+                    }
+                }
+            } else {
+                // Create new order
+                orderData.id = orderData.orderCode;
+                orderData.createdAt = new Date().toISOString();
+                orderData.updatedAt = new Date().toISOString();
+                salesOrdersData.push(orderData);
+                if (window.notifications) {
+                    window.notifications.success('Đã tạo đơn hàng mới thành công');
+                } else {
+                    alert('Đã tạo đơn hàng mới thành công');
+                }
+            }
+            
+            saveSalesOrdersData();
+            renderOrdersTable();
+            closeCreateEditOrderModal();
+        });
+
+        // CRUD Functions for Sales Orders
+        let salesOrdersData = [];
+        let editingOrderId = null;
+        let productsData = [];
+
+        // Load products data from localStorage
+        function loadProductsData() {
+            const data = localStorage.getItem('tkProducts_data');
+            if (data) {
+                productsData = JSON.parse(data);
+            } else {
+                // No products data found in localStorage
+                productsData = [];
+                console.warn('Không tìm thấy dữ liệu sản phẩm trong localStorage. Vui lòng thêm sản phẩm trước.');
+            }
+        }
+
+        // Load sales orders data from localStorage
+        function loadSalesOrdersData() {
+            const data = localStorage.getItem('tkSalesOrders_data');
+            if (data) {
+                salesOrdersData = JSON.parse(data);
+            } else {
+                // No sales orders data found in localStorage
+                salesOrdersData = [];
+                console.info('Chưa có dữ liệu đơn hàng trong localStorage. Bắt đầu với danh sách trống.');
+            }
+        }
+
+        // Save sales orders data to localStorage
+        function saveSalesOrdersData() {
+            localStorage.setItem('tkSalesOrders_data', JSON.stringify(salesOrdersData));
+        }
+
+        // Generate new order ID
+        function generateOrderId() {
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            
+            const prefix = `SO-${year}-${month}${day}`;
+            let counter = 1;
+            let newId = `${prefix}-${String(counter).padStart(3, '0')}`;
+            
+            // Check if ID exists, increment counter if needed
+            while (salesOrdersData.find(order => order.id === newId)) {
+                counter++;
+                newId = `${prefix}-${String(counter).padStart(3, '0')}`;
+            }
+            
+            return newId;
+        }
+
+        // Render orders table
+        function renderOrdersTable() {
+            const tbody = document.querySelector('#ordersTable tbody');
+            if (!tbody) return;
+
+            tbody.innerHTML = '';
+
+            salesOrdersData.forEach(order => {
+                const statusClass = getStatusClass(order.status);
+                const statusText = getStatusText(order.status);
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><strong>${order.orderCode}</strong></td>
+                    <td>${order.customerName}</td>
+                    <td>${formatDate(order.orderDate)}</td>
+                    <td>${formatDate(order.deliveryDate)}</td>
+                    <td>${formatCurrency(order.totalAmount)}</td>
+                    <td>
+                        <span class="status-badge ${statusClass}">${statusText}</span>
+                    </td>
+                    <td>
+                        <div class="btn-group">
+                            <button class="btn btn-sm btn-primary" onclick="viewOrder('${order.id}')" title="Xem chi tiết">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            ${order.status !== 'completed' && order.status !== 'cancelled' ? 
+                                `<button class="btn btn-sm btn-warning" onclick="checkAvailability('${order.id}')" title="Kiểm tra khả năng đáp ứng">
+                                    <i class="fas fa-clipboard-check"></i>
+                                </button>` : ''
+                            }
+                            <button class="btn btn-sm btn-secondary" onclick="editOrder('${order.id}')" title="Chỉnh sửa">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteOrder('${order.id}')" title="Xóa">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+
+            updateStatistics();
+        }
+
+        // Helper functions
+        function getStatusClass(status) {
+            const statusClasses = {
+                'new': 'status-new',
+                'processing': 'status-processing',
+                'completed': 'status-completed',
+                'cancelled': 'status-cancelled'
+            };
+            return statusClasses[status] || 'status-new';
+        }
+
+        function getStatusText(status) {
+            const statusTexts = {
+                'new': 'Mới',
+                'processing': 'Đang xử lý',
+                'completed': 'Hoàn thành',
+                'cancelled': 'Đã hủy'
+            };
+            return statusTexts[status] || 'Mới';
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return '';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('vi-VN');
+        }
+
+        function formatCurrency(amount) {
+            if (!amount) return '0 VNĐ';
+            return new Intl.NumberFormat('vi-VN').format(amount) + ' VNĐ';
+        }
+
+        function updateStatistics() {
+            const stats = {
+                total: salesOrdersData.length,
+                processing: salesOrdersData.filter(o => o.status === 'processing').length,
+                completed: salesOrdersData.filter(o => o.status === 'completed').length,
+                cancelled: salesOrdersData.filter(o => o.status === 'cancelled').length
+            };
+
+            // Update dashboard cards
+            const statElements = document.querySelectorAll('.stat-number');
+            if (statElements.length >= 4) {
+                statElements[0].textContent = stats.total;
+                statElements[1].textContent = stats.processing;
+                statElements[2].textContent = stats.completed;
+                statElements[3].textContent = stats.cancelled;
+            }
+        }
+
+        // Modal management functions
+        function openCreateOrderModal() {
+            // Check if products data is available
+            if (productsData.length === 0) {
+                if (window.notifications) {
+                    window.notifications.error('Không có dữ liệu sản phẩm. Vui lòng thêm sản phẩm trong module "Quản lý Sản phẩm" trước khi tạo đơn hàng.');
+                } else {
+                    alert('Không có dữ liệu sản phẩm. Vui lòng thêm sản phẩm trong module "Quản lý Sản phẩm" trước khi tạo đơn hàng.');
+                }
+                return;
+            }
+            
+            editingOrderId = null;
+            document.getElementById('createEditOrderTitle').innerHTML = `
+                <i class="fas fa-plus-circle" style="color: #28a745; margin-right: 0.5rem;"></i>
+                Tạo đơn hàng mới
+            `;
+            document.getElementById('saveButtonText').textContent = 'Lưu đơn hàng';
+            
+            // Reset form
+            document.getElementById('createEditOrderForm').reset();
+            document.getElementById('orderCode').value = generateOrderId();
+            document.getElementById('orderDate').value = new Date().toISOString().split('T')[0];
+            document.getElementById('orderItemsContainer').innerHTML = '';
+            
+            // Add one default item row
+            addOrderItem();
+            
+            document.getElementById('createEditOrderModal').style.display = 'flex';
+        }
+
+        function closeCreateEditOrderModal() {
+            document.getElementById('createEditOrderModal').style.display = 'none';
+            editingOrderId = null;
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Sales Orders page loading...');
+            loadProductsData();
+            loadSalesOrdersData();
+            renderOrdersTable();
+            console.log('Sales Orders page loaded:', {
+                productsCount: productsData.length,
+                ordersCount: salesOrdersData.length
+            });
+        });
+
+        // Add custom styles for small buttons
+        const customStyles = `
+            .btn-sm {
+                padding: 0.25rem 0.5rem;
+                font-size: 0.8rem;
+                margin: 0 0.1rem;
+            }
+            .btn-group {
+                display: flex;
+                gap: 0.2rem;
+            }
+            .modal {
+                display: none;
+            }
+            .modal.show {
+                display: flex;
+            }
+            .order-item-row {
+                display: flex;
+                gap: 1rem;
+                align-items: end;
+                margin-bottom: 1rem;
+                padding: 1rem;
+                border: 1px solid #dee2e6;
+                border-radius: 5px;
+                background: #f8f9fa;
+            }
+            .order-item-row .form-group {
+                margin-bottom: 0;
+            }
+        `;
+        
+        const styleSheet = document.createElement('style');
+        styleSheet.textContent = customStyles;
+        document.head.appendChild(styleSheet);
+    </script>
+</body>
+</html>
